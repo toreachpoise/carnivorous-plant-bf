@@ -19,6 +19,9 @@ image greenhouse bg:
 
 # character sprites
 
+image test:
+    "images.jpg"
+
 # minigame images
 
 # The game starts here.
@@ -28,6 +31,6 @@ label start:
     ## ARE: in previous projects ive just used this space to declare variables
     ## and do chapter selection and the like; nothing happens till chapter 1
 
-    jump chapter1
+    jump minigame3
 
     return
