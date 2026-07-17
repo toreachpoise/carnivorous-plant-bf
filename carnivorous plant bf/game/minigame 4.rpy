@@ -89,7 +89,6 @@ init python:
 
         def move(self, keyboard):
             print("no controls implemented yet")
-            # self.position = player_position_hack
 
         def animate(self):
             # control block will go here to determine current animation state, which should be just idle or chop
@@ -102,6 +101,12 @@ init python:
 
         def reset(self):
             print("reset currently does nothing, deprecate me?")
+
+    class GameImage(Sprite):
+        def __init__(self, image, zoom, width, height, x, y):
+            Sprite.__init__(self, width, height, x, y)
+            self.image = Transform(Image(image), xzoom=zoom,yzoom=zoom)
+            self.zoom = zoom
 
     class Handler(renpy.Displayable):
         def __init__(self, player):
@@ -117,7 +122,9 @@ init python:
 
         def render(self, width, height, st, at):
             display = renpy.Render(display_width, display_height)
-            # background.render(display, st, at)
+            # # background.render(display, st, at)
+            for img in game_images:
+                img.render(display, st, at)
             player.render(display, st, at)
             self.update()
             renpy.redraw(self, 0)
@@ -202,6 +209,11 @@ init python:
     print(player)
     print(player.position)
     # background = Background(display_width, display_height, 0,0)
+    cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',6,257,192,0,0)
+    overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,display_width/4,0)
+    bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,display_width/4,0)
+
+    game_images = [cutting_board_img,overlay_box_img,bread_img]
 
 default handler = Handler(player)
 
