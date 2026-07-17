@@ -51,10 +51,6 @@ init python:
             self.x = vec.x
             self.y = vec.y
 
-    player_position_hack = Vector(0,0) #for some weird reason player position gets set to None when Handler calls Render and I can't figure out why yet
-    # so the hacky solution for now is to set this global variable, and reset player.position in player.update
-    # which wouldn't work if we had to move the player, but we don't so it should be fine?
-
     class Sprite():
         def __init__(self, width, height, x, y):
             self.width = width
@@ -64,11 +60,6 @@ init python:
         def render(self, render, st, at):
             display = renpy.render(self.image, self.width, self.height, st, at)
             render.blit(display, (int(self.position.x), int(self.position.y)))
-
-    class Background(Sprite):
-        def __init__(self, width, height, x, y):
-            Sprite.__init__(self, width, height, x, y)
-            self.image = Image('/images/minigame imgs/Plant-bf-minigame-Background.png')
 
     class Player(Sprite):
         def __init__(self, width, height, x, y):
@@ -92,8 +83,6 @@ init python:
             
             self.image = self.idle_ani[self.move_frame]
 
-            print(self.position)
-
         def update(self, keyboard):
             self.move(keyboard)
             self.animate()
@@ -112,8 +101,7 @@ init python:
                 self.move_frame = 0
 
         def reset(self):
-            print("resettin fuck all baby")
-            # self.position = persistent.player_start
+            print("reset currently does nothing, deprecate me?")
 
     class Handler(renpy.Displayable):
         def __init__(self, player):
@@ -126,20 +114,10 @@ init python:
             # self.song = "/audio/neonsigns.wav"
             self.stage_complete = False
             self.first_try = True
-            print("handler is being initialized")
-            print(player)
-            print(player.position)
 
         def render(self, width, height, st, at):
             display = renpy.Render(display_width, display_height)
-            background.render(display, st, at)
-            print("now in render, pre player update")
-            print(player)
-            print(player.position)
-            player.update(handler.keyboard)
-            print("now in render")
-            print(player)
-            print(player.position)
+            # background.render(display, st, at)
             player.render(display, st, at)
             self.update()
             renpy.redraw(self, 0)
@@ -223,12 +201,12 @@ init python:
     print("just init player")
     print(player)
     print(player.position)
-    background = Background(display_width, display_height, 0,0)
+    # background = Background(display_width, display_height, 0,0)
 
 default handler = Handler(player)
 
 screen minigame(level):
-    if handler.game_over == True:
+    if handler.game_over == True: #game over screen
         $ handler.game_over = False
         # $ player.position = persistent.player_start
         frame:
@@ -238,7 +216,7 @@ screen minigame(level):
             textbutton "continue ... ?":
                 yoffset 920
                 action Return()
-    elif handler.stage_complete == True:
+    elif handler.stage_complete == True: #level success screen
         $ handler.game_over = False
         # $ player.position = persistent.player_start
         $ player.fallcount = 0
@@ -250,11 +228,11 @@ screen minigame(level):
                 yoffset 920
                 xalign 0.5
                 action Call("leveldone")
-    else:
+    else: #gameplay screen
         frame:
             yminimum 1080
-            background "#000000"
-            add '/images/minigame imgs/Plant-bf-minigame-Background.png' yalign 0.5
+            background "#3f6c50"
+            # add '/images/minigame imgs/Plant-bf-minigame-Background.png' yalign 0.5
             add handler yalign 0.5
             textbutton "click to skip":
                 action Return()
