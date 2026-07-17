@@ -31,6 +31,6 @@ label start:
     ## ARE: in previous projects ive just used this space to declare variables
     ## and do chapter selection and the like; nothing happens till chapter 1
 
-    jump minigame3
+    jump minigame
 
     return
