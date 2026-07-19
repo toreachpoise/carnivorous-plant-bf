@@ -30,6 +30,9 @@ label chapter1:
         "Where is the shopkeeper":
             pass
     p "We don't have time for this, I have to talk to the witch."
+
+    show witch
+
     ARE "here is where it will progress to the witch part"
 
 
