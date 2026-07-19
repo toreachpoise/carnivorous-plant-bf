@@ -54,6 +54,8 @@ label boyfrienddescription:
         if boyfriend_description == "":
             boyfriend_description = "I don't know ... someone who is nice and makes me feel good, I guess?"
             no_bf_description = True
+        else:
+            no_bf_description = False
     p "[boyfriend_description]"
     if no_bf_description == True:
         w "Wow ... Have you just not put any thought into it or what?"
@@ -88,11 +90,32 @@ label namesetting:
     menu:
         "Is that what you want to go with?"
         "Yep, my name is [player_name]":
-            jump signcontract
+            jump nameset
         "Wait, no, I want to change it ...":
             w "Yeah, that's what I thought."
             w "It doesn't really matter anyway, your soul has astrological coordinates that will be bound to your new boyfriend anyway,{w} but I have to put something on the form ..."
             jump namesetting
+
+label nameset:
+    $ name_set = True
+    "Her tone becomes weirdly official again."
+    w "Now remember, like I told you before. You'll have to feed and water your boyfriend for as long as you live."
+    "She didn't say that before, but like, isn't that true of most plants?"
+    "Wait, as long as *I* live?"
+    w "This is a till-death-do-us-part situation. He's going to love you forever whether you like it or not."
+    w "And remember, you have to feed him."
+    "Why does she keep saying that?"
+    w "Okay, and just to reiterate though I would rather not cuz I find it a bit sad, you described your dream boyfriend as, and I quote, '[boyfriend_description]', end quote. Is that right?"
+    menu:
+        "Is that who you want to spend the rest of your life with until your death do you part?"
+        "W-wait, no ...":
+            p "Wait, sorry, I actually changed my mind."
+            w "Fuck, kids these days can't even describe their undying lover whom they want to care for for all eternity in one sentence anymore ..."
+            jump boyfrienddescription
+        "Yes. I'm sure.":
+            p "After all, what choice do I have?"
+            p "Otherwise I'll be alone forever."
+            jump signcontract
 
 label signcontract:
     w "Okay. {nw}"
