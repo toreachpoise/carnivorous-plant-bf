@@ -108,6 +108,38 @@ init python:
             self.image = Transform(Image(image), xzoom=zoom,yzoom=zoom)
             self.zoom = zoom
 
+    class MultiSpriteObject():
+        def __init__(self, sprites):
+            self.sprites = []
+            for sprite in sprites:
+                self.sprites.append(sprite)
+
+        def render(self, render, st, at):
+            for sprite in self.sprites:
+                sprite.render(render, st, at)
+
+    class ChopRhythmBox(MultiSpriteObject):
+        def __init__(self):
+            self.rhythm_box_background_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Rhythm-box.png",6,257,192,0,0)
+            self.beat_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",6,2,15,0,0)
+            # self.beat_img.image = Transform(self.beat_img.image, xpos=200)
+            self.rhythm_box_position_indic_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Position-indicator.png",6,257,192,0,0)
+            # MultiSpriteObject.__init__(self,[rhythm_box_background_img, beat_img, rhythm_box_position_indic_img])
+            self.time_count = 0
+
+        def render(self, render, st, at):
+            # update beat_img position
+            self.time_count += 1
+            self.beat_img.position.x = self.time_count
+            display = renpy.render(self.beat_img.image, self.beat_img.width, self.beat_img.height, st, at)
+            render.blit(display, (int(self.beat_img.position.x), int(self.beat_img.position.y)))
+
+            self.rhythm_box_background_img.render(render,st,at)
+            self.beat_img.render(render,st,at)
+            self.rhythm_box_position_indic_img.render(render,st,at)
+            print(self.time_count)
+
+
     class Handler(renpy.Displayable):
         def __init__(self, player):
             renpy.Displayable.__init__(self)
@@ -126,6 +158,7 @@ init python:
             for img in game_images:
                 img.render(display, st, at)
             player.render(display, st, at)
+            chop_rhythm_box.render(display,st,at)
             self.update()
             renpy.redraw(self, 0)
             self.first_render = False
@@ -205,15 +238,14 @@ init python:
             pass
 
     player = Player(32, 32, 1, 1)
-    print("just init player")
-    print(player)
-    print(player.position)
     # background = Background(display_width, display_height, 0,0)
     cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',6,257,192,0,0)
     overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,display_width/4,0)
     bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,display_width/4,0)
 
     game_images = [cutting_board_img,overlay_box_img,bread_img]
+
+    chop_rhythm_box = ChopRhythmBox()
 
 default handler = Handler(player)
 
