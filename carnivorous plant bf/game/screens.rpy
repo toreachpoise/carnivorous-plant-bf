@@ -180,7 +180,7 @@ screen input(prompt):
             xanchor gui.dialogue_text_xalign
             xpos gui.dialogue_xpos
             xsize gui.dialogue_width
-            ypos gui.dialogue_ypos
+            ypos -0.2
 
             text prompt style "input_prompt"
             input id "input"
@@ -276,6 +276,7 @@ style quick_button:
 
 style quick_button_text:
     properties gui.text_properties("quick_button")
+    
 
 
 ################################################################################

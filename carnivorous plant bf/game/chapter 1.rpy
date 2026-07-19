@@ -1,5 +1,5 @@
 label chapter1:
-  # Show a background. This uses a placeholder by default, but you can
+    # Show a background. This uses a placeholder by default, but you can
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
@@ -32,8 +32,87 @@ label chapter1:
     p "We don't have time for this, I have to talk to the witch."
 
     show witch
+    "Her hair is messy and her long nails are undoubtedly full of dirt."
+    "She's beautiful, in a haven't slept in three weeks kind of way."
+    "You're not a magic user by any means but you can sense that strange power emanates from her."
+    w "Welcome to the Magic Plant Shop(TM), where wishes really do grow on trees. What is your heart's desire?"
+    "She doesn't even look up at you. Her voice has the sing-song quality of having delivered this monologue hundreds of times before."
+    p "I want ... uh ... a boyfriend ...?"
+    ### witch looks up at you
+    w "You know you don't have to hire a witch on the black market for that, right? They have men at most bars."
+    p "not for me ....."
+    ### looks back down
+    w "Ouch. Well, it's your eternal soul I guess."
+    w "... a boyfriend ..."
+    ### looks at you
+    extend "can you describe this boyfriend please?"
 
-    ARE "here is where it will progress to the witch part"
+label boyfrienddescription:
+    python:
+        boyfriend_description = renpy.input("What do I want in a boyfriend?")
+        boyfriend_description.strip()
+        if boyfriend_description == "":
+            boyfriend_description = "I don't know ... someone who is nice and makes me feel good, I guess?"
+            no_bf_description = True
+    p "[boyfriend_description]"
+    if no_bf_description == True:
+        w "Wow ... Have you just not put any thought into it or what?"
+        w "Seems like if you want to meet someone it would be good to know what kind of person you want to meet."
+        p "Look, I just, I don't know how to describe it."
+        extend " I don't have a lot of experience with these things ..."
+        w "Damn."
+        menu:
+            " ... That's all she has to say? She's kinda ..."
+            "hard to read":
+                pass
+            "an asshole":
+                pass
+    else:
+        ### disgusted
+        w "Well, I guess people like to stick their bits into and/or have their bits invaded by all sorts of things ..."
+    if name_set == True:
+        jump signcontract
 
+    w "So what's your name, anyway, for the contract?"
+    " ... Contract?"
+label namesetting:
+    python:
+        player_name = renpy.input("What do I tell her my  name is?")
+        player_name.strip()
+    if player_name == "":
+        w "... no response?"
+        extend "... okay, I guess I'm gonna put 'nameless weirdo'."
+    else:
+        w "[player_name]?"
+        extend " I highly doubt that's your government name, but if that's what you want to go with ...?"
+    menu:
+        "Is that what you want to go with?"
+        "Yep, my name is [player_name]":
+            jump signcontract
+        "Wait, no, I want to change it ...":
+            w "Yeah, that's what I thought."
+            w "It doesn't really matter anyway, your soul has astrological coordinates that will be bound to your new boyfriend anyway,{w} but I have to put something on the form ..."
+            jump namesetting
+
+label signcontract:
+    w "Okay. {nw}"
+    ### she hands you the paper
+    extend " ... "
+    extend "Sign at the bottom."
+    window hide
+    w "Okay, well, good luck."
+    ### disgust
+    w "Since you apparently just want to fuck the plant, I guess you can go to the greenhouse and pick one out yourself."
+    w "You can leave through the back door of the greenhouse."
+    "She clearly doesn't want to see you again ..."
+    w "And don't try taking two. I can see you on the security camera ... and you honestly couldn't handle it."
+    w "Oh, and here's the manual."
+    ### handing paper
+    extend " Please be sure to read it thoroughly, your life depends on it!"
+    w "Thank you for coming to the Magic Plant Shop, please give us a good review on Boogle Maps~!"
+
+return
+
+    
 
 return
