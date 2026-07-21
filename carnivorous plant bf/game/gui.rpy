@@ -27,24 +27,24 @@ define config.check_conflicting_properties = True
 ## The colors of text in the interface.
 
 ## An accent color used throughout the interface to label and highlight text.
-define gui.accent_color = '#006666'
+define gui.accent_color = '#ff9ee0'
 
 ## The color used for a text button when it is neither selected nor hovered.
-define gui.idle_color = '#707070'
+define gui.idle_color = '#82f0d7'
 
 ## The small color is used for small text, which needs to be brighter/darker to
 ## achieve the same effect.
-define gui.idle_small_color = '#606060'
+define gui.idle_small_color = '#daedc8'
 
 ## The color that is used for buttons and bars that are hovered.
-define gui.hover_color = '#006666'
+define gui.hover_color = '#cd526f'
 
 ## The color used for a text button when it is selected but not focused. A
 ## button is selected if it is the current screen or preference value.
 define gui.selected_color = '#555555'
 
 ## The color used for a text button when it cannot be selected.
-define gui.insensitive_color = '#7070707f'
+define gui.insensitive_color = '#3f6c50'
 
 ## Colors used for the portions of bars that are not filled in. These are not
 ## used directly, but are used when re-generating bar image files.
@@ -52,20 +52,20 @@ define gui.muted_color = '#66a3a3'
 define gui.hover_muted_color = '#99c1c1'
 
 ## The colors used for dialogue and menu choice text.
-define gui.text_color = '#404040'
-define gui.interface_text_color = '#404040'
+define gui.text_color = '#3f6c50'
+define gui.interface_text_color = '#593353'
 
 
 ## Fonts and Font Sizes ########################################################
 
 ## The font used for in-game text.
-define gui.text_font = "DejaVuSans.ttf"
+define gui.text_font = "/gui/determination.ttf"
 
 ## The font used for character names.
-define gui.name_text_font = "DejaVuSans.ttf"
+define gui.name_text_font = "/gui/determination.ttf"
 
 ## The font used for out-of-game text.
-define gui.interface_text_font = "DejaVuSans.ttf"
+define gui.interface_text_font = "/gui/determination.ttf"
 
 ## The size of normal dialogue text.
 define gui.text_size = 40
@@ -138,12 +138,13 @@ define gui.dialogue_xpos = 200
 define gui.dialogue_ypos = 0.1
 
 ## The maximum width of dialogue text, in pixels.
-define gui.dialogue_width = 1632
+define gui.dialogue_width = 1520
 
 ## The horizontal alignment of the dialogue text. This can be 0.0 for left-
 ## aligned, 0.5 for centered, and 1.0 for right-aligned.
 define gui.dialogue_text_xalign = 0.0
 define gui.dialogue_text_yalign = 0.5
+define gui.dialogue_text_color = "#000"
 
 
 ## Buttons #####################################################################
@@ -253,7 +254,7 @@ define gui.file_slot_rows = 2
 
 ## The position of the left side of the navigation buttons, relative to the left
 ## side of the screen.
-define gui.navigation_xpos = 60
+define gui.navigation_xpos = 160
 
 ## The vertical position of the skip indicator.
 define gui.skip_ypos = 15
@@ -268,10 +269,10 @@ define gui.choice_spacing = 33
 define gui.navigation_spacing = 6
 
 ## Controls the amount of spacing between preferences.
-define gui.pref_spacing = 15
+define gui.pref_spacing = 30
 
 ## Controls the amount of spacing between preference buttons.
-define gui.pref_button_spacing = 0
+define gui.pref_button_spacing = 20
 
 ## The spacing between file page buttons.
 define gui.page_spacing = 0
@@ -292,7 +293,7 @@ define gui.main_menu_text_xalign = 1.0
 define gui.frame_borders = Borders(6, 6, 6, 6)
 
 ## The frame that is used as part of the confirm screen.
-define gui.confirm_frame_borders = Borders(60, 60, 60, 60)
+define gui.confirm_frame_borders = Borders(140, 80, 140, 60)
 
 ## The frame that is used as part of the skip screen.
 define gui.skip_frame_borders = Borders(24, 8, 75, 8)
@@ -346,10 +347,10 @@ define config.history_length = 250
 
 ## The height of a history screen entry, or None to make the height variable at
 ## the cost of performance.
-define gui.history_height = 210
+define gui.history_height = None
 
 ## Additional space to add between history screen entries.
-define gui.history_spacing = 0
+define gui.history_spacing = 20
 
 ## The position, width, and alignment of the label giving the name of the
 ## speaking character.

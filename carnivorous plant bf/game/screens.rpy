@@ -343,6 +343,7 @@ style navigation_button:
 
 style navigation_button_text:
     properties gui.text_properties("navigation_button")
+    xalign 0.5
 
 
 ## Main Menu screen ############################################################
@@ -363,8 +364,32 @@ screen main_menu():
         style "main_menu_frame"
 
     ## The use statement includes another screen inside this one. The actual
-    ## contents of the main menu are in the navigation screen.
-    use navigation
+    
+    #use navigation ## in this case we're getting rid of the navigation formatting
+
+    imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 410  
+    textbutton _("START") action Start() xpos 620 ypos 425
+    
+    imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 510  
+    textbutton _("LOAD") action ShowMenu("load") xpos 625 ypos 525
+
+    imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 410
+    textbutton _("PREFERENCES") action ShowMenu("preferences") xpos 1120 ypos 425
+
+    imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 510
+    textbutton _("ABOUT") action ShowMenu("about") xpos 1180 ypos 525
+
+    if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+
+        ## Help isn't necessary or relevant to mobile devices.
+        imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 610 
+        textbutton _("HELP") action ShowMenu("help") xpos 625 ypos 625
+
+    if renpy.variant("pc"):
+
+        ## The quit button is banned on iOS and unnecessary on Android and web.
+        imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 610         
+        textbutton _("QUIT") action Quit(confirm=not main_menu) xpos 1200 ypos 625
 
     if gui.show_name:
 
@@ -387,8 +412,9 @@ style main_menu_version is main_menu_text
 style main_menu_frame:
     xsize 420
     yfill True
+    
 
-    background "gui/overlay/main_menu.png"
+    #background "gui/overlay/main_menu.png"
 
 style main_menu_vbox:
     xalign 1.0
@@ -424,6 +450,8 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
         add gui.main_menu_background
     else:
         add gui.game_menu_background
+    if preferences:
+        add "gui/overlay/preferences.png"
 
     frame:
         style "game_menu_outer_frame"
@@ -433,6 +461,10 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
             ## Reserve space for the navigation section.
             frame:
                 style "game_menu_navigation_frame"
+                textbutton _("Return"):
+                    style "return_button"
+                    action Return()
+
 
             frame:
                 style "game_menu_content_frame"
@@ -476,12 +508,9 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
     use navigation
 
-    textbutton _("Return"):
-        style "return_button"
+    
 
-        action Return()
-
-    label title
+    #label title ## displays title of game menu page you're on, i couldn't figure out how to edit it so I just removed it lol
 
     if main_menu:
         key "game_menu" action ShowMenu("main_menu")
@@ -502,18 +531,20 @@ style return_button_text is navigation_button_text
 
 style game_menu_outer_frame:
     bottom_padding 45
-    top_padding 180
+    top_padding 10
 
     background "gui/overlay/game_menu.png"
 
 style game_menu_navigation_frame:
     xsize 420
     yfill True
+    xpos 0.5
 
 style game_menu_content_frame:
     left_margin 60
     right_margin 30
     top_margin 15
+
 
 style game_menu_viewport:
     xsize 1380
@@ -534,8 +565,8 @@ style game_menu_label_text:
     yalign 0.5
 
 style return_button:
-    xpos gui.navigation_xpos
-    yalign 1.0
+    xpos -55
+    yalign 0.9
     yoffset -45
 
 
@@ -556,9 +587,10 @@ screen about():
     use game_menu(_("About"), scroll="viewport"):
 
         style_prefix "about"
-
+        
         vbox:
-
+            ypos 100 xpos 200
+            xsize 1000
             label "[config.name!t]"
             text _("Version [config.version!t]\n")
 
@@ -575,6 +607,9 @@ style about_text is gui_text
 
 style about_label_text:
     size gui.label_text_size
+
+style about_text:
+    color "#81edd4"
 
 
 ## Load and Save screens #######################################################
@@ -738,7 +773,7 @@ screen preferences():
     use game_menu(_("Preferences"), scroll="viewport"):
 
         vbox:
-
+            
             hbox:
                 box_wrap True
 
@@ -843,10 +878,12 @@ style pref_label:
     bottom_margin 3
 
 style pref_label_text:
-    yalign 1.0
+    yalign 0.0
 
 style pref_vbox:
     xsize 338
+    ypos 100
+    xpos 400
 
 style radio_vbox:
     spacing gui.pref_button_spacing
@@ -944,6 +981,8 @@ style history_label is gui_label
 style history_label_text is gui_label_text
 
 style history_window:
+    xpos 200
+    ypos 120
     xfill True
     ysize gui.history_height
 
@@ -965,6 +1004,7 @@ style history_text:
     min_width gui.history_text_width
     textalign gui.history_text_xalign
     layout ("subtitle" if gui.history_text_xalign else "tex")
+    color '#81edd4'
 
 style history_label:
     xfill True
@@ -1195,6 +1235,7 @@ style confirm_frame:
 style confirm_prompt_text:
     textalign 0.5
     layout "subtitle"
+    color "#f5d6d5"
 
 style confirm_button:
     properties gui.button_properties("confirm_button")
