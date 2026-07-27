@@ -19,6 +19,7 @@ label chapter1:
             "There's something off about the plants themselves ..."
             menu:
                 "Look closer":
+                    $ optimism += 1
                     "When you pay attention to the plants, they each seem a bit too ... alive."
                     "I mean, you know plants are alive but they each emanate an energy that both draws you to them and kind of frightens you."
                     "At first you can't really see anything abnormal about them. You're not exactly an expert in plant anatomy."
@@ -52,9 +53,11 @@ label boyfrienddescription:
         boyfriend_description = renpy.input("What do I want in a boyfriend?")
         boyfriend_description.strip()
         if boyfriend_description == "":
+            optimism -= 1
             boyfriend_description = "I don't know ... someone who is nice and makes me feel good, I guess?"
             no_bf_description = True
         else:
+            optimism += 1
             no_bf_description = False
     p "[boyfriend_description]"
     if no_bf_description == True:
@@ -82,6 +85,7 @@ label namesetting:
         player_name = renpy.input("What do I tell her my  name is?")
         player_name.strip()
     if player_name == "":
+        $ optimism -= 1
         w "... no response?"
         extend "... okay, I guess I'm gonna put 'nameless weirdo'."
     else:
@@ -90,8 +94,10 @@ label namesetting:
     menu:
         "Is that what you want to go with?"
         "Yep, my name is [player_name]":
+            $ optimism += 1
             jump nameset
         "Wait, no, I want to change it ...":
+            $ optimism -= 1
             w "Yeah, that's what I thought."
             w "It doesn't really matter anyway, your soul has astrological coordinates that will be bound to your new boyfriend anyway,{w} but I have to put something on the form ..."
             jump namesetting
@@ -107,9 +113,10 @@ label nameset:
     "Why does she keep saying that?"
     w "Okay, and just to reiterate though I would rather not cuz I find it a bit sad, you described your dream boyfriend as, and I quote, '[boyfriend_description]', end quote. Is that right?"
     menu:
-        "Is that who you want to spend the rest of your life with until your death do you part?"
+        "Is that who you want to spend the rest of your life with until your death do you part? '[boyfriend_description]'?"
         "W-wait, no ...":
             p "Wait, sorry, I actually changed my mind."
+            $ optimism -= 1
             w "Fuck, kids these days can't even describe their undying lover whom they want to care for for all eternity in one sentence anymore ..."
             jump boyfrienddescription
         "Yes. I'm sure.":
@@ -133,9 +140,8 @@ label signcontract:
     ### handing paper
     extend " Please be sure to read it thoroughly, your life depends on it!"
     w "Thank you for coming to the Magic Plant Shop, please give us a good review on Boogle Maps~!"
+    $ chapter = 2
 
-return
+jump start
 
-    
 
-return

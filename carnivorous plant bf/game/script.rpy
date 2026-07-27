@@ -4,9 +4,12 @@
 
 # VARIABLES
 default player_name = "You"
-default greatest_desire = "to be loved"
+default deepest_desire = "to be loved"
 default boyfriend_description = "... someone who is nice and makes me feel good, I guess?"
 default name_set = False
+default chapter = 1
+default optimism = 0 ## ARE: not sure if this will even be a game mechanic but i'm tracking it lol
+default boyfriend = "flytrap"
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
@@ -40,6 +43,9 @@ label start:
         "minigame":
             jump minigame
         "story":
-            jump chapter1
+            if chapter == 1:
+                jump chapter1
+            if chapter == 2:
+                jump chapter2
 
     return
