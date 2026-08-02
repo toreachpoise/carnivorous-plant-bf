@@ -3,6 +3,7 @@ init python:
     FPS = 60
     animationspeed = 3  #fps of the animation will be 'FPS' divided by this number
     #screen = pygame.display.set_mode(window_size, 0, 32)
+    ui_scale = 6
     display_width = 1920
     display_height = 960
     display = renpy.Render(display_width, display_height)
@@ -87,8 +88,8 @@ init python:
             self.move(keyboard)
             self.animate()
 
-        def move(self, keyboard):
-            print("no controls implemented yet")
+        # def move(self, keyboard):
+        #     print("no controls implemented yet")
 
         def animate(self):
             # control block will go here to determine current animation state, which should be just idle or chop
@@ -100,7 +101,7 @@ init python:
                 self.move_frame = 0
 
         def reset(self):
-            print("reset currently does nothing, deprecate me?")
+            self.died = False
 
     class GameImage(Sprite):
         def __init__(self, image, zoom, width, height, x, y):
@@ -114,31 +115,100 @@ init python:
             for sprite in sprites:
                 self.sprites.append(sprite)
 
+        def append_sprite(self, sprite):
+            self.sprites.append(sprite)
+
         def render(self, render, st, at):
             for sprite in self.sprites:
                 sprite.render(render, st, at)
 
     class ChopRhythmBox(MultiSpriteObject):
         def __init__(self):
-            self.rhythm_box_background_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Rhythm-box.png",6,257,192,0,0)
-            self.beat_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",6,2,15,0,0)
-            # self.beat_img.image = Transform(self.beat_img.image, xpos=200)
-            self.rhythm_box_position_indic_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Position-indicator.png",6,257,192,0,0)
-            # MultiSpriteObject.__init__(self,[rhythm_box_background_img, beat_img, rhythm_box_position_indic_img])
-            self.time_count = 0
+            self.rhythm_box_background_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Rhythm-box.png",ui_scale,257,192,0,0)
+            self.beats = []
+            self.rhythm_box_position_indic_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Position-indicator.png",ui_scale,257,192,0,0)
+            # self.beat = ChopRhythmBeat(Vector(169*ui_scale,18*ui_scale),15,-2)
+
+        def update(self, keyboard):
+            if len(self.beats) > 0:
+
+                for beat in self.beats:
+                    if beat.miss == True:
+                        self.beats.remove(beat)
+                    else:
+                        beat.update()
+
+                if keyboard["space"]:
+                        self.beats[0].check_for_hit()
+
+            # print("miss:")
+            # print(self.beat.miss)
+            # print("attempted:")
+            # print(self.beat.player_attempted_hit)
 
         def render(self, render, st, at):
-            # update beat_img position
-            self.time_count += 1
-            self.beat_img.position.x = self.time_count
-            display = renpy.render(self.beat_img.image, self.beat_img.width, self.beat_img.height, st, at)
-            render.blit(display, (int(self.beat_img.position.x), int(self.beat_img.position.y)))
-
             self.rhythm_box_background_img.render(render,st,at)
-            self.beat_img.render(render,st,at)
-            self.rhythm_box_position_indic_img.render(render,st,at)
-            print(self.time_count)
 
+            for beat in self.beats:
+                display = renpy.render(beat.image.image, beat.image.width, beat.image.height, st, at)
+                render.blit(display, (int(beat.position.x), int(beat.position.y)))
+            
+            self.rhythm_box_position_indic_img.render(render,st,at)
+
+        def add_beat(self):
+            self.beats.append(ChopRhythmBeat(Vector(169*ui_scale,18*ui_scale),15,-2))
+
+        def reset(self):
+            self.beats = []
+
+    class ChopRhythmBeat():
+        def __init__(self, position, margin, speed):
+            self.position = position
+            self.speed = speed
+            self.margin = margin
+            self.image = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",ui_scale,2,15,position.x,position.y)
+            self.beat_end = 5*ui_scale
+            self.beat_hit_h_loc = 30*ui_scale
+            self.player_attempted_hit = False
+            self.miss = False
+
+        def update(self):
+            self.position.x += self.speed
+            if self.player_attempted_hit == False and self.position.x <= self.beat_end:
+                self.miss=True
+
+
+        def check_for_hit(self):
+            if self.player_attempted_hit == False:
+                self.player_attempted_hit = True
+                if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
+                    self.miss = False
+                else:
+                    self.miss = True
+
+    class LevelIngredient():
+        def __init__(self, name, timing, image_path):
+            self.name = name
+            self.timing = timing
+            self.image_path = image_path
+
+    class Level():
+        def __init__(self, ingredients):
+            self.ingredients = ingredients
+            self.cur_ingredient_index = 0
+            self.max_ingredient_index = len(self.ingredients)
+
+        def swap_ingredient(self):
+            if self.cur_ingredient_index < max_ingredient_index:
+                self.cur_ingredient_index += 1
+            else:
+                self.cur_ingredient_index = 0
+
+        def get_active_ingredient(self):
+            return self.ingredients[self.cur_ingredient_index]
+
+        def reset(self):
+            self.cur_ingredient_index = 0
 
     class Handler(renpy.Displayable):
         def __init__(self, player):
@@ -151,14 +221,16 @@ init python:
             # self.song = "/audio/neonsigns.wav"
             self.stage_complete = False
             self.first_try = True
+            self.time = 0
 
         def render(self, width, height, st, at):
             display = renpy.Render(display_width, display_height)
             # # background.render(display, st, at)
             for img in game_images:
                 img.render(display, st, at)
-            player.render(display, st, at)
+            chop_rhythm_box.update(self.keyboard)
             chop_rhythm_box.render(display,st,at)
+            player.render(display, st, at)
             self.update()
             renpy.redraw(self, 0)
             self.first_render = False
@@ -169,6 +241,11 @@ init python:
                 player.reset()
                 self.game_over = True
                 renpy.timeout(0)
+            else:
+                for beat_time in cur_level.get_active_ingredient().timing:
+                    if self.time == beat_time:
+                        chop_rhythm_box.add_beat()
+                self.time += 1
             if self.first_try == True:
                 self.first_try = False
 
@@ -233,19 +310,25 @@ init python:
         def reset(self):
             self.keyboard = {"up": False, "down": False, "left": False, "right": False, "space": False, "shift": False, "enter": False}
             self.game_over = False
+            self.time = 0
             player.reset()
+            cur_level.reset()
+            # chop_rhythm_box.reset() # TURN THIS BACK ON ONCE BEATS ARE SPAWNED BY HANDLER
             # renpy.music.play(self.song, loop = True)
             pass
 
     player = Player(32, 32, 1, 1)
     # background = Background(display_width, display_height, 0,0)
-    cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',6,257,192,0,0)
+    cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
     overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,display_width/4,0)
     bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,display_width/4,0)
 
     game_images = [cutting_board_img,overlay_box_img,bread_img]
 
     chop_rhythm_box = ChopRhythmBox()
+
+    level1 = Level([LevelIngredient("chicken", [0,125,250,375],"/images/minigame imgs/Plant-bf-minigame-Chicken.png")])
+    cur_level = level1
 
 default handler = Handler(player)
 
