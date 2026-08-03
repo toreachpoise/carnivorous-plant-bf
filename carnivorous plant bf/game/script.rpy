@@ -9,7 +9,11 @@ default boyfriend_description = "... someone who is nice and makes me feel good,
 default name_set = False
 default chapter = 1
 default optimism = 0 ## ARE: not sure if this will even be a game mechanic but i'm tracking it lol
+default brains = 0 ## idk lmao
 default boyfriend = "flytrap"
+default soil = False
+default water = False
+default light = False
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
