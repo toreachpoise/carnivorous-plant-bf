@@ -81,6 +81,7 @@ menu:
                 p "No, it can't be, this thing is too weird ..."
                 $ optimism -= 1
                 p "I have to find something else ..."
+                hide flytrap
                 jump chooseboyfriend
     "spider":
         show spider
@@ -96,9 +97,10 @@ menu:
                 p "No, it can't be, this thing is too weird ..."
                 $ optimism -= 1
                 p "I have to find something else ..."
+                hide spider
                 jump chooseboyfriend
     "foxglove":
-        show thistle_n_foxglove
+        show foxglove
         "Its many lips pucker and shine. The glossy surface of them smells like sweet syrup."
         $ foxglove_impulse = renpy.input("You know you want to ...", default = "touch it.")
         menu:
@@ -110,9 +112,10 @@ menu:
                 p "No, it can't be, this thing is too weird ..."
                 $ optimism -= 1
                 p "I have to find something else ..."
+                hide foxglove
                 jump chooseboyfriend
     "thistle":
-        show thistle_n_foxglove
+        show thistle
         "This plant has a one foot gap between it and every other object around it."
         "You notice the spikes, no, the fangs around its head. They seem sturdy and heavy."
         "It's menacing. Like a sword in a museum that has not stopped being a tool for killing just because it is on display."
@@ -127,6 +130,7 @@ menu:
                 p "No, it can't be, this thing is too weird ..."
                 $ optimism -= 1
                 p "I have to find something else ..."
+                hide thistle
                 jump chooseboyfriend
     "orb":
         "Your gaze is drawn to this plant's light even as its brilliance hurts your eyes."
@@ -150,6 +154,7 @@ menu:
                 p "No, it can't be, this thing is too weird ..."
                 $ optimism -= 1
                 p "I have to find something else ..."
+                hide orb
                 jump chooseboyfriend
 
 label boyfriendchosen:

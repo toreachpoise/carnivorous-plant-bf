@@ -28,6 +28,7 @@ image greenhouse bg:
     "greenhouse bg.png"
     zoom 1.5
 
+
 # character sprites
 image test:
     "images.jpg"
