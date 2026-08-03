@@ -886,6 +886,7 @@ style pref_vbox:
     xpos 400
 
 style radio_vbox:
+    xpos 100
     spacing gui.pref_button_spacing
 
 style radio_button:
@@ -917,7 +918,9 @@ style slider_button_text:
     properties gui.text_properties("slider_button")
 
 style slider_vbox:
+    xpos 100
     xsize 675
+    spacing gui.pref_button_spacing
 
 
 ## History screen ##############################################################
@@ -981,7 +984,7 @@ style history_label is gui_label
 style history_label_text is gui_label_text
 
 style history_window:
-    xpos 200
+    xpos 100
     ypos 120
     xfill True
     ysize gui.history_height
