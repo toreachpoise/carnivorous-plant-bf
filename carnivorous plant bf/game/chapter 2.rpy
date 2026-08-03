@@ -70,7 +70,7 @@ menu:
     p "But which do I pick?"
     "flytrap":
         show flytrap
-        "Four little heads rest at the end of four leafy arms."
+        "Four little heads rest at the ends of four leafy arms."
         "One at a time, the heads turn to you as if to a beat. They almost seem to be striking a pose?"
         menu:
             p "Is this gonna be my plant boyfriend?"
