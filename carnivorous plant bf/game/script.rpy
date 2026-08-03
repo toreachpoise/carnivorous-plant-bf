@@ -47,5 +47,7 @@ label start:
                 jump chapter1
             if chapter == 2:
                 jump chapter2
+            if chapter == 3:
+                jump chapter3
 
     return
