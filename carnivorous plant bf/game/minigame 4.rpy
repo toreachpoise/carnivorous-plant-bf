@@ -133,13 +133,19 @@ init python:
             if len(self.beats) > 0:
 
                 for beat in self.beats:
-                    if beat.miss == True:
+                    if beat.past_end == True:
                         self.beats.remove(beat)
                     else:
                         beat.update()
 
                 if keyboard["space"]:
-                        self.beats[0].check_for_hit()
+                    for beat in self.beats:
+                        if beat.past_hit_loc:
+                            continue
+                        else:
+                            if not beat.miss:
+                                beat.check_for_hit()
+                            break
 
             # print("miss:")
             # print(self.beat.miss)
@@ -171,20 +177,44 @@ init python:
             self.beat_hit_h_loc = 30*ui_scale
             self.player_attempted_hit = False
             self.miss = False
+            self.past_end = False
+            self.past_hit_loc = False
 
         def update(self):
             self.position.x += self.speed
-            if self.player_attempted_hit == False and self.position.x <= self.beat_end:
-                self.miss=True
-
+            if self.position.x <= self.beat_end:
+                self.past_end = True
+            if self.position.x + self.margin <= self.beat_hit_h_loc: #checking specifically that the beat is past the hit location AND the margin of error
+                self.past_hit_loc = True
 
         def check_for_hit(self):
             if self.player_attempted_hit == False:
                 self.player_attempted_hit = True
                 if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
                     self.miss = False
+                    hit_or_miss_indicator.set_state("hit")
                 else:
                     self.miss = True
+                    hit_or_miss_indicator.set_state("miss")
+
+    class HitMissIndicator():
+        def __init__(self,position_x, position_y):
+            self.hit_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Hit-Indicator.png",1,268,109,position_x,position_y)
+            self.miss_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Miss-Indicator.png",1,268,109,position_x,position_y)
+            self.neutral_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Neutral-Indicator.png",1,268,109,position_x,position_y)
+            self.active_img = self.neutral_img
+
+        def set_state(self, state):
+            match state:
+                case "hit":
+                    self.active_img = self.hit_img
+                case "miss":
+                    self.active_img = self.miss_img
+                case _:
+                    self.active_img = self.neutral_img
+
+        def render(self, render, st, at):
+            self.active_img.render(render, st, at)
 
     class LevelIngredient():
         def __init__(self, name, timing, image_path):
@@ -230,6 +260,7 @@ init python:
                 img.render(display, st, at)
             chop_rhythm_box.update(self.keyboard)
             chop_rhythm_box.render(display,st,at)
+            hit_or_miss_indicator.render(display,st,at)
             player.render(display, st, at)
             self.update()
             renpy.redraw(self, 0)
@@ -322,6 +353,7 @@ init python:
     cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
     overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,display_width/4,0)
     bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,display_width/4,0)
+    hit_or_miss_indicator = HitMissIndicator(9*ui_scale, -20)
 
     game_images = [cutting_board_img,overlay_box_img,bread_img]
 
