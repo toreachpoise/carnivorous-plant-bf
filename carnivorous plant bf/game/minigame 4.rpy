@@ -109,6 +109,13 @@ init python:
             self.image = Transform(Image(image), xzoom=zoom,yzoom=zoom)
             self.zoom = zoom
 
+    class Time():
+        def __init__(self):
+            self.time = 0
+
+        def update(self):
+            self.time += 1
+
     class MultiSpriteObject():
         def __init__(self, sprites):
             self.sprites = []
@@ -127,7 +134,6 @@ init python:
             self.rhythm_box_background_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Rhythm-box.png",ui_scale,257,192,0,0)
             self.beats = []
             self.rhythm_box_position_indic_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Position-indicator.png",ui_scale,257,192,0,0)
-            # self.beat = ChopRhythmBeat(Vector(169*ui_scale,18*ui_scale),15,-2)
 
         def update(self, keyboard):
             if len(self.beats) > 0:
@@ -138,19 +144,20 @@ init python:
                     else:
                         beat.update()
 
-                if keyboard["space"]:
-                    for beat in self.beats:
-                        if beat.past_hit_loc:
-                            continue
-                        else:
-                            if not beat.miss:
-                                beat.check_for_hit()
-                            break
+        # called by Handler when a space key event is handled
+        def check_for_hit(self):
+            if len(self.beats) > 0:
+                for beat in self.beats: #loop until we get the first beat past the hit loc
+                    if beat.past_hit_loc:
+                        continue
+                    else: #check if we hit it
+                        beat.check_for_hit()    
+                        return
 
-            # print("miss:")
-            # print(self.beat.miss)
-            # print("attempted:")
-            # print(self.beat.player_attempted_hit)
+                # if we got to the end with out finding a beat past_hit_loc, then the player should miss
+                hit_or_miss_indicator.set_state("miss")
+            else: #if the player was trying to hit and there are no beats, that should miss
+                hit_or_miss_indicator.set_state("miss")
 
         def render(self, render, st, at):
             self.rhythm_box_background_img.render(render,st,at)
@@ -175,8 +182,8 @@ init python:
             self.image = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",ui_scale,2,15,position.x,position.y)
             self.beat_end = 5*ui_scale
             self.beat_hit_h_loc = 30*ui_scale
-            self.player_attempted_hit = False
-            self.miss = False
+            self.player_attempted_hit = False # this flag is set but not used
+            self.miss = False # this flag is set but not used
             self.past_end = False
             self.past_hit_loc = False
 
@@ -188,33 +195,42 @@ init python:
                 self.past_hit_loc = True
 
         def check_for_hit(self):
-            if self.player_attempted_hit == False:
-                self.player_attempted_hit = True
-                if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
-                    self.miss = False
-                    hit_or_miss_indicator.set_state("hit")
-                else:
-                    self.miss = True
-                    hit_or_miss_indicator.set_state("miss")
+            # these two commented lines limited the player to one try per beat, I don't think that's desireable anymore
+            # if self.player_attempted_hit == False:
+            #     self.player_attempted_hit = True
+            if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
+                self.miss = False
+                hit_or_miss_indicator.set_state("hit")
+            else:
+                self.miss = True
+                hit_or_miss_indicator.set_state("miss")
 
     class HitMissIndicator():
-        def __init__(self,position_x, position_y):
+        def __init__(self, time_to_neutral, position_x, position_y):
             self.hit_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Hit-Indicator.png",1,268,109,position_x,position_y)
             self.miss_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Miss-Indicator.png",1,268,109,position_x,position_y)
             self.neutral_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Neutral-Indicator.png",1,268,109,position_x,position_y)
             self.active_img = self.neutral_img
+            self.reset_time = 0
+            self.time_to_neutral = time_to_neutral
 
         def set_state(self, state):
             match state:
                 case "hit":
                     self.active_img = self.hit_img
+                    self.reset_time = time.time + self.time_to_neutral
                 case "miss":
                     self.active_img = self.miss_img
+                    self.reset_time = time.time + self.time_to_neutral
                 case _:
                     self.active_img = self.neutral_img
 
         def render(self, render, st, at):
             self.active_img.render(render, st, at)
+
+        def update(self):
+            if time.time == self.reset_time:
+                self.set_state("neutral")
 
     class LevelIngredient():
         def __init__(self, name, timing, image_path):
@@ -246,6 +262,7 @@ init python:
             self.level = "level 1"
             self.window_size = Vector(1920, 960)
             self.keyboard = {"left": False, "right": False, "space": False, "enter": False}
+            self.keyboard_held = {"left": False, "right": False, "space": False, "enter": False}
             self.first_render = True
             self.game_over = False
             # self.song = "/audio/neonsigns.wav"
@@ -254,12 +271,14 @@ init python:
             self.time = 0
 
         def render(self, width, height, st, at):
+            time.update()
             display = renpy.Render(display_width, display_height)
             # # background.render(display, st, at)
             for img in game_images:
                 img.render(display, st, at)
             chop_rhythm_box.update(self.keyboard)
             chop_rhythm_box.render(display,st,at)
+            hit_or_miss_indicator.update()
             hit_or_miss_indicator.render(display,st,at)
             player.render(display, st, at)
             self.update()
@@ -281,48 +300,62 @@ init python:
                 self.first_try = False
 
         def event(self, ev, x, y, st):
+            # calling functions that trigger on key press here seems to be the best way to guarantee they only get called once
+            # also for this, we track if a key is held so that we only fire the function when it's pressed but not held
+
             if ev.type == pygame.KEYDOWN:
-                if ev.key == pygame.K_LEFT:
-                    self.keyboard["left"] = True
-                elif ev.key == pygame.K_RIGHT:
-                    self.keyboard["right"] = True
-                elif ev.key == pygame.K_SPACE:
-                    self.keyboard["space"] = True
-                elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
-                    self.keyboard["shift"] = True
-                elif ev.key == pygame.K_RETURN:
-                    self.keyboard["enter"] = True
-            elif ev.type == pygame.KEYUP:
-                if ev.key == pygame.K_LEFT:
-                    self.keyboard["left"] = False
-                elif ev.key == pygame.K_RIGHT:
-                    self.keyboard["right"] = False
-                elif ev.key == pygame.K_SPACE:
-                    self.keyboard["space"] = False
-                elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
-                    self.keyboard["shift"] = False
-                elif ev.key == pygame.K_RETURN:
-                    self.keyboard["enter"] = False
-            else:
-                if renpy.map_event(ev, "pad_a_press"):
-                    self.keyboard["space"] = True
-                elif renpy.map_event(ev, "pad_a_release"):
-                    self.keyboard["space"] = False
+                if ev.key == pygame.K_SPACE:
+                    if self.keyboard_held["space"] == False:
+                        self.keyboard["space"] = True
+                        self.keyboard_held["space"] = True
+                        chop_rhythm_box.check_for_hit()
+                    else:
+                        self.keyboard["space"] = False
+            if ev.type == pygame.KEYUP:
+                if ev.key == pygame.K_SPACE:
+                    self.keyboard_held["space"] = False
+            # if ev.type == pygame.KEYDOWN:
+            #     if ev.key == pygame.K_LEFT:
+            #         self.keyboard["left"] = True
+            #     elif ev.key == pygame.K_RIGHT:
+            #         self.keyboard["right"] = True
+            #     elif ev.key == pygame.K_SPACE:
+            #         self.keyboard["space"] = True
+            #     elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
+            #         self.keyboard["shift"] = True
+            #     elif ev.key == pygame.K_RETURN:
+            #         self.keyboard["enter"] = True
+            # elif ev.type == pygame.KEYUP:
+            #     if ev.key == pygame.K_LEFT:
+            #         self.keyboard["left"] = False
+            #     elif ev.key == pygame.K_RIGHT:
+            #         self.keyboard["right"] = False
+            #     elif ev.key == pygame.K_SPACE:
+            #         self.keyboard["space"] = False
+            #     elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
+            #         self.keyboard["shift"] = False
+            #     elif ev.key == pygame.K_RETURN:
+            #         self.keyboard["enter"] = False
+            # else:
+            #     if renpy.map_event(ev, "pad_a_press"):
+            #         self.keyboard["space"] = True
+            #     elif renpy.map_event(ev, "pad_a_release"):
+            #         self.keyboard["space"] = False
 
-                if renpy.map_event(ev, "pad_b_press"):
-                    self.keyboard["enter"] = True
-                elif renpy.map_event(ev, "pad_b_release"):
-                    self.keyboard["enter"] = False
+            #     if renpy.map_event(ev, "pad_b_press"):
+            #         self.keyboard["enter"] = True
+            #     elif renpy.map_event(ev, "pad_b_release"):
+            #         self.keyboard["enter"] = False
 
-                if renpy.map_event(ev, "pad_leftx_neg") or renpy.map_event(ev, "pad_rightx_neg") or renpy.map_event(ev, "pad_dpleft_press"):
-                    self.keyboard["left"] = True
-                elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["left"]) or renpy.map_event(ev, "pad_dpleft_release"):
-                    self.keyboard["left"] = False
+            #     if renpy.map_event(ev, "pad_leftx_neg") or renpy.map_event(ev, "pad_rightx_neg") or renpy.map_event(ev, "pad_dpleft_press"):
+            #         self.keyboard["left"] = True
+            #     elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["left"]) or renpy.map_event(ev, "pad_dpleft_release"):
+            #         self.keyboard["left"] = False
 
-                if renpy.map_event(ev, "pad_leftx_pos") or renpy.map_event(ev, "pad_rightx_pos") or renpy.map_event(ev, "pad_dpright_press"):
-                    self.keyboard["right"] = True
-                elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["right"]) or renpy.map_event(ev, "pad_dpright_release"):
-                    self.keyboard["right"] = False
+            #     if renpy.map_event(ev, "pad_leftx_pos") or renpy.map_event(ev, "pad_rightx_pos") or renpy.map_event(ev, "pad_dpright_press"):
+            #         self.keyboard["right"] = True
+            #     elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["right"]) or renpy.map_event(ev, "pad_dpright_release"):
+            #         self.keyboard["right"] = False
 
             # Ensure the screen updates
             renpy.restart_interaction()
@@ -348,12 +381,14 @@ init python:
             # renpy.music.play(self.song, loop = True)
             pass
 
+    time = Time()
+
     player = Player(32, 32, 1, 1)
     # background = Background(display_width, display_height, 0,0)
     cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
-    overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,display_width/4,0)
-    bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,display_width/4,0)
-    hit_or_miss_indicator = HitMissIndicator(9*ui_scale, -20)
+    overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
+    bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
+    hit_or_miss_indicator = HitMissIndicator(20, 9*ui_scale, -20)
 
     game_images = [cutting_board_img,overlay_box_img,bread_img]
 
