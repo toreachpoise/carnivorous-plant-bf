@@ -377,14 +377,13 @@ init python:
             self.time = 0
             player.reset()
             cur_level.reset()
-            # chop_rhythm_box.reset() # TURN THIS BACK ON ONCE BEATS ARE SPAWNED BY HANDLER
+            chop_rhythm_box.reset() # TURN THIS BACK ON ONCE BEATS ARE SPAWNED BY HANDLER
             # renpy.music.play(self.song, loop = True)
             pass
 
     time = Time()
 
     player = Player(32, 32, 1, 1)
-    # background = Background(display_width, display_height, 0,0)
     cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
     overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
     bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
@@ -394,7 +393,9 @@ init python:
 
     chop_rhythm_box = ChopRhythmBox()
 
-    level1 = Level([LevelIngredient("chicken", [0,125,250,375],"/images/minigame imgs/Plant-bf-minigame-Chicken.png")])
+    # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
+    # a full bar is ~480 units of time?
+    level1 = Level([LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken.png")])
     cur_level = level1
 
 default handler = Handler(player)
