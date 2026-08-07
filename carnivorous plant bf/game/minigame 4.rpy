@@ -100,6 +100,24 @@ init python:
             if self.move_frame > 7:
                 self.move_frame = 0
 
+        def chop(self):
+            hit = chop_rhythm_box.check_for_hit()
+
+            path_end = ""
+
+            if time.time % 2 == 0: #arbitrarily decide on which audio file to play based on if current tick is odd or even
+                path_end = "1"
+            else:
+                path_end = "2"
+
+            if hit:
+                hit_or_miss_indicator.set_state("hit")
+                renpy.music.play("/audio/good-chop-"+path_end+".mp3", loop = False)
+            else:
+                hit_or_miss_indicator.set_state("miss")
+                renpy.music.play("/audio/miss-cut-"+path_end+".wav", loop = False)
+
+
         def reset(self):
             self.died = False
 
@@ -144,20 +162,20 @@ init python:
                     else:
                         beat.update()
 
-        # called by Handler when a space key event is handled
+        # called in Player by Handler when a space key event is handled
+        # Returns if the hit (True) or missed (False)
         def check_for_hit(self):
             if len(self.beats) > 0:
                 for beat in self.beats: #loop until we get the first beat past the hit loc
                     if beat.past_hit_loc:
                         continue
                     else: #check if we hit it
-                        beat.check_for_hit()    
-                        return
-
+                        return beat.check_for_hit()
+            
                 # if we got to the end with out finding a beat past_hit_loc, then the player should miss
-                hit_or_miss_indicator.set_state("miss")
-            else: #if the player was trying to hit and there are no beats, that should miss
-                hit_or_miss_indicator.set_state("miss")
+                # or if the player was trying to hit and there are no beats, that should miss
+            hit_or_miss_indicator.set_state("miss")
+            return False
 
         def render(self, render, st, at):
             self.rhythm_box_background_img.render(render,st,at)
@@ -183,7 +201,7 @@ init python:
             self.beat_end = 5*ui_scale
             self.beat_hit_h_loc = 30*ui_scale
             self.player_attempted_hit = False # this flag is set but not used
-            self.miss = False # this flag is set but not used
+            self.miss = False
             self.past_end = False
             self.past_hit_loc = False
 
@@ -200,10 +218,12 @@ init python:
             #     self.player_attempted_hit = True
             if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
                 self.miss = False
-                hit_or_miss_indicator.set_state("hit")
+                # hit_or_miss_indicator.set_state("hit") #now set in Player.chop()
             else:
                 self.miss = True
-                hit_or_miss_indicator.set_state("miss")
+                # hit_or_miss_indicator.set_state("miss")
+
+            return not self.miss
 
     class HitMissIndicator():
         def __init__(self, time_to_neutral, position_x, position_y):
@@ -308,7 +328,7 @@ init python:
                     if self.keyboard_held["space"] == False:
                         self.keyboard["space"] = True
                         self.keyboard_held["space"] = True
-                        chop_rhythm_box.check_for_hit()
+                        player.chop()
                     else:
                         self.keyboard["space"] = False
             if ev.type == pygame.KEYUP:
