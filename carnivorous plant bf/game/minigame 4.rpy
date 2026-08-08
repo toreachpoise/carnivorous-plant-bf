@@ -115,7 +115,8 @@ init python:
                 renpy.music.play("/audio/good-chop-"+path_end+".mp3", loop = False)
             else:
                 hit_or_miss_indicator.set_state("miss")
-                renpy.music.play("/audio/miss-cut-"+path_end+".wav", loop = False)
+                # renpy.music.play("/audio/miss-cut-"+path_end+".wav", loop = False) #can't find a second good 'cut self sound'
+                renpy.music.play("audio/miss-cut.mp3", loop = False)
 
 
         def reset(self):

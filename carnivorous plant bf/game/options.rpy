@@ -43,6 +43,11 @@ This game was greated by Aaron El Sabrout and Rhys Maxwell for the 2026 Trans Re
 define build.name = "carnivorousplantbf"
 
 
+## Disables blurring edges of zooming to make pixel art look good
+
+define config.nearest_neighbor = True
+
+
 ## Sounds and music ############################################################
 
 ## These three variables control, among other things, which mixers are shown
