@@ -252,6 +252,65 @@ init python:
             if time.time == self.reset_time:
                 self.set_state("neutral")
 
+    class CuttingBoard():
+        def __init__(self):
+            self.cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
+            self.ingredients = cur_level.ingredients
+            self.ingredient_images = []
+            self.active_icon_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Active-Ingredient-Indicator.png',ui_scale,21,15,0,0)
+
+            self.init_ingredient_images()
+            self.place_icon_image(0)
+
+        def init_ingredient_images(self):
+            # the cutting board is about 145 * 89 pixels before scaling
+            # so to place up to 4 ingredients, we need to have an offset of half * ui_scale
+            # we also have to place these with their offsets so that they go to where the cutting board is
+            # the cutting board starts 22 pixels across, and 55 down
+            width = 145 * ui_scale
+            height = 89 * ui_scale
+            x_offset = 22 * ui_scale
+            y_offset = 55 * ui_scale
+
+            ing_count = 0
+
+            for ingredient in cur_level.ingredients:
+                match ing_count:
+                    case 0:
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset,y_offset))
+                    case 1:
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset + (width / 2),y_offset))
+                    case 2:
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset,y_offset + (height / 2)))
+                    case 3:
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset + (width / 2),y_offset + (height / 2)))
+
+                ing_count += 1
+
+        # index is an int 0-3 for the current active ingredient
+        def place_icon_image(self,index):
+            # cutting board is 151 pixels long without offset from wall
+            width = 145 * ui_scale
+            height = 89 * ui_scale
+            y_offset = 38 * ui_scale
+
+            match(index):
+                case 0:
+                    self.active_icon_img.position = Vector(width / 4, y_offset)
+                case 1:
+                    self.active_icon_img.position = Vector(width * 3 / 4, y_offset)
+                case 2:
+                    self.active_icon_img.position = Vector(width / 4, y_offset + (height / 2))
+                case 3:
+                    self.active_icon_img.position = Vector(width * 3 / 4, y_offset + (height / 2))
+
+        def render(self, render, st, at):
+            self.cutting_board_img.render(render,st,at)
+            for ingredient_img in self.ingredient_images:
+                ingredient_img.render(render,st,at)
+            self.active_icon_img.render(render,st,at)
+
+
     class LevelIngredient():
         def __init__(self, name, timing, image_path):
             self.name = name
@@ -265,10 +324,12 @@ init python:
             self.max_ingredient_index = len(self.ingredients)
 
         def swap_ingredient(self):
-            if self.cur_ingredient_index < max_ingredient_index:
+            if self.cur_ingredient_index < (self.max_ingredient_index - 1):
                 self.cur_ingredient_index += 1
             else:
                 self.cur_ingredient_index = 0
+
+            cutting_board.place_icon_image(self.cur_ingredient_index)
 
         def get_active_ingredient(self):
             return self.ingredients[self.cur_ingredient_index]
@@ -300,6 +361,7 @@ init python:
             chop_rhythm_box.render(display,st,at)
             hit_or_miss_indicator.update()
             hit_or_miss_indicator.render(display,st,at)
+            cutting_board.render(display,st,at)
             player.render(display, st, at)
             self.update()
             renpy.redraw(self, 0)
@@ -329,6 +391,7 @@ init python:
                         self.keyboard["space"] = True
                         self.keyboard_held["space"] = True
                         player.chop()
+                        cur_level.swap_ingredient()
                     else:
                         self.keyboard["space"] = False
             if ev.type == pygame.KEYUP:
@@ -404,19 +467,21 @@ init python:
     time = Time()
 
     player = Player(32, 32, 1, 1)
-    cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
     overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
     bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
     hit_or_miss_indicator = HitMissIndicator(20, 9*ui_scale, -20)
 
-    game_images = [cutting_board_img,overlay_box_img,bread_img]
+    game_images = [overlay_box_img,bread_img]
 
     chop_rhythm_box = ChopRhythmBox()
 
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
-    level1 = Level([LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken.png")])
+    ingredients_list = [LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png"),LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png")]
+    level1 = Level(ingredients_list)
     cur_level = level1
+    cutting_board = CuttingBoard()
+
 
 default handler = Handler(player)
 
