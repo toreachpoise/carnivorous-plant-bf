@@ -14,6 +14,8 @@ default boyfriend = "flytrap"
 default soil = False
 default water = False
 default light = False
+default fed_plant = 0
+default slept_together = False
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
@@ -21,6 +23,7 @@ define p = Character("player_name", dynamic=True, who_color="#82f0d7")
 define w = Character("The Witch", who_color="#b0eb88")
 #define n = Character("", what_color="#4927F5") ## ARE: turns out defining the narrator in this way causes issues lol
 define ARE = Character ("aaron note", what_color="#82f0d7", who_color="#F54927")
+define b = Character("boyfriend")
 
 # IMAGES
 # bgs

@@ -183,5 +183,178 @@ menu:
     "skip":
         pass
 
+label chapter3minigamedone:
+scene kitchen light with dissolve
+menu:
+    "cut":
+        "You drive the knife down, expecting to cut meat, but it knicks your own flesh instead."
+        "Your face scrunches as you feel the shock of pain, and the knife slips from your hand."
+        "You don't hear it fall."
+        "Instead, you hear a rustling of leaves, and a cool wet sensation over your thumb."
+        if boyfriend == "flytrap":
+            show flytrap
+        if boyfriend == "spider":
+            show spider
+        if boyfriend == "foxglove":
+            show foxglove
+        if boyfriend == "thistle":
+            show thistle
+        if boyfriend == "orb":
+            show orb
+        "As you open your eyes, you see {i}him{/i} suckling at your wound like it's sweet ambrosia."
+        if boyfriend == "flytrap":
+            "Despite the sharpness of its teeth, it scoops the liquid into one of its jaws gently."
+        if boyfriend == "spider":
+            "Its leaves funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
+        if boyfriend == "foxglove":
+            "The lips are as plush and tender as you imagined."
+            "You can't help but imagine how they would feel on other parts of your body."
+        if boyfriend == "thistle":
+            "Its thorns funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
+        if boyfriend == "orb":
+            "The drops are drawn magically from your fingers into the air."
+            "They swirl about the orb and then become absorbed into it."
+        jump alittlemore
+    "didn't cut":
+        "Your finished sandwich is nothing special, but it was made with care."
+        "You approach the plant with it feeling ..."
+        extend " nervous? Ridiculous? Both?"
+        if boyfriend == "flytrap":
+            show flytrap with dissolve
+        if boyfriend == "spider":
+            show spider with dissolve
+        if boyfriend == "foxglove":
+            show foxglove with dissolve
+        if boyfriend == "thistle":
+            show thistle with dissolve
+        if boyfriend == "orb":
+            show orb with dissolve
+        "You try to offer the sandwich to the [boyfriend] on your open palm."
+        "..."
+        "There's no motion, and now you are certain you just feel ridiculous."
+        "You sigh."
+        "You sigh {fast}and then it snaps."
+        if boyfriend == "spider":
+            "Its sharp leaves claw into you.{nw}"
+        if boyfriend == "thistle":
+            "Its flowerhead thuds into you.{nw}"
+        if boyfriend == "orb":
+            "A ray of white-hot light shoots out from the orb.{nw}"
+        else:
+            "Teeth on your fingers. Sharp teeth. Wooden teeth.{nw}"
+        extend "Tearing into your offering and your hand like they're one and the same."
+        $ fed_plant += 5
+        jump alittlemore
+
+
+label alittlemore:
+b "Please, just a little more.{nw}"
+menu:
+    b "Please, just a little more.{fast}"
+    "What, no!":
+        "You shove his green fibrous flesh back."
+        "After a little resistance he releases you, and shifts back sheepishly."
+        jump ch3end
+    "Indulge him":
+        if (boyfriend == spider) or (boyfriend == flytrap) or (boyfriend == thistle):
+            "Your eyes meet his, and you give the slightest nod."
+        else:
+            "Your eyes meet what answer for his, and you give the slightest nod."
+        $ fed_plant += 5
+        "This time he siphons the warm blood straight from your veins."
+        "The [boyfriend] grows greater in strength with each drop."
+        "You feel like you can hear his roots growing deeper and stronger as his complexion takes on a deeper green."
+        jump ch3end
+
+label ch3end:
+b "Fuck, sorry, thank you, wow."
+p "..............................."
+b "Oh, that sandwich also looks good. Is that for me?"
+b "I'm so hungry ..."
+p "......"
+extend " Uh, yeah, that was the idea I guess ... here."
+if boyfriend == "flytrap":
+    "He descends on it with all for mouths, snapping it up instantly."
+if boyfriend == "spider":
+    "His hands snatch the sandwich up, tearing it to bits and disappearing it down his many throats."
+if boyfriend == "foxglove":
+    "He inhales with such force the sandwich is sucked into one of his mouths."
+    "As he gulps, you can see the sandwich travel down one of its tubular throats for a moment before it vanishes."
+if boyfriend == "thistle":
+    "He smashes and smashes and smashes it into bits and blinks the crumbs into his great eye."
+if boyfriend == "orb":
+    "The orb emits a brilliant flash."
+    "As your eyes adjust afterwards, the sandwich is gone, eroded without a trace."
+$ fed_plant += 5
+b "That was delicious, wow."
+b "The witch only gave us these brown crunchy things. I couldn't read the bag, but there was a dog on it..."
+p "I'm glad you enjoyed ... ah ... haha ..."
+p "... Sorry, am I being weird?"
+p "I'm super freaked out."
+b "It's okay, this is all pretty weird."
+extend "... But I'm glad I'm here!"
+b "You've been doing a really good job with me so far."
+p "That's uhm, that's good."
+p "Let me know if you need anything else. I wanna keep doing a good uhm, doing good for uh, ... yeah ..."
+if boyfriend == "flytrap":
+    "All four heads look at you with all twelve of his eyes."
+if boyfriend == "spider":
+    "All of its hands point its eyes toward you."
+if boyfriend == "foxglove":
+    "Each mouth wears an earnest grin as he speaks."
+if boyfriend == "thistle":
+    "Its eye meets yours and you notice the gooey swirls of plasma around his pupil in part to avoid the intensity of his gaze."
+if boyfriend == "orb":
+    "The orb bathes the room in warm orange light."
+b "You will. I know you will."
+b "And I can't wait to be [boyfriend_description] for you."
+b "It was really nice to meet you, [player_name]."
+b "I need to rest now, though. I'll get stronger the more you feed me, but for now I need rest ..."
+p "Oh, okay, I'll go to my room then."
+b @ vpunch "Wait!"
+extend " Stay. Or take me with you."
+b "I'd just like to be near you if I could ..."
+b "I'll be so vulnerable when I rest. I'd feel safer with you."
+p "{i}Shit, god that is so cute. {/i}"
+extend "{i}But also he did just drink my blood. {/i}"
+extend "{i}But but I mean, he's very sweet? Like what's the worst that could happen, right?{/i}"
+menu:
+    "What if he eats me in my sleep?":
+        $ optimism -= 3
+        p "Sorry, I have a sleep ... uh"
+        extend "... thing, where I like ...{nw}"
+        b "Suck at lying? It's fine, I get it."
+        b "I'll be here if you change your mind."
+        "You give your [boyfriend] a half-smile before stepping into your bedroom and closing the door."
+        scene bedroom
+        "With a pang of guilt, you carefully place a chair to bar the door. You hope he doesn't hear you. You're pretty sure he does."
+        "Sleep does not come easily, but eventually it takes hold and you drift off."
+        $ slept_together = False
+        scene bedroom with fade
+        pause 2
+        $ chapter = 4
+        jump start
+    "What if it's exactly what I wanted?":
+        $ optimism += 2
+        p "I'd like that." 
+        p "I'd like to make you feel safe, if it would help."
+        b "It really, really would."
+        scene living room dark
+        if boyfriend == "flytrap":
+            show flytrap with dissolve
+        if boyfriend == "spider":
+            show spider with dissolve
+        if boyfriend == "foxglove":
+            show foxglove with dissolve
+        if boyfriend == "thistle":
+            show thistle with dissolve
+        if boyfriend == "orb":
+            show orb with dissolve
+        "You bring a blanket and pillow to your couch, it's easier at this point than moving your plant."
+        "He shifts toward you as he finds his own comfortable position."
+        "Your fingers and his leaves drift together as you both drift off."
+        $ slept_together = True
+        $ chapter = 4
+        jump start
 
 
