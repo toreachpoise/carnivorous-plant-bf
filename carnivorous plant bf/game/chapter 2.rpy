@@ -1,6 +1,7 @@
 label chapter2:
 
-scene greenhouse bg
+scene greenhouse 3
+with dissolve
 "The greenhouse is lush and green, suffused with the dim, pinkish light of dozens of LED grow lights."
 "It smells wet and warm and vegetal in there. And a bit like boy sweat."
 p "I don't just want to fuck the plant."
@@ -50,6 +51,8 @@ menu:
         pass
 
 p "I guess I better try to pick one out ..."
+scene greenhouse 4
+with dissolve
 ## some kind of visual transition; maybe a CG goes here
 "There are plants everywhere. On shelves, on the ground, hanging from the ceiling."
 "Each one you rest your attention on reveals a human form or body part incorporated into it:"
@@ -166,6 +169,9 @@ if optimism < 3:
     extend " I think? I hope?"
 "On some unseen timer, sprinklers activate all over the greenhouse, watering the plants and soaking you."
 p "*sigh* ... Time to bring him home."
+scene plant store exterior 2
+with dissolve
+pause 2
 
 $ chapter = 3
 jump start

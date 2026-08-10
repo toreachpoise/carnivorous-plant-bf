@@ -3,12 +3,13 @@ label chapter1:
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
-    scene greenhouse bg
+    scene plant store exterior 2
 
     "The tagline on the sign says 'Grow your wishes!'"
     "The exterior is overgrown with ivy."
 
-    ARE "scene transition to interior plant shop"
+    scene greenhouse 1
+    with dissolve
 
     "The shop interior is messy."
     "There are straggly and overgrown plants under hot pink artificial lights all over the room."
@@ -19,6 +20,7 @@ label chapter1:
             "There's something off about the plants themselves ..."
             menu:
                 "Look closer":
+                    scene greenhouse 3 with dissolve
                     $ optimism += 1
                     "When you pay attention to the plants, they each seem a bit too ... alive."
                     "I mean, you know plants are alive but they each emanate an energy that both draws you to them and kind of frightens you."
@@ -32,7 +34,10 @@ label chapter1:
             pass
     p "We don't have time for this, I have to talk to the witch."
 
+
+    scene greenhouse 2
     show witch
+    with dissolve
     "Her hair is messy and her long nails are undoubtedly full of dirt."
     "She's beautiful, in a haven't slept in three weeks kind of way."
     "You're not a magic user by any means but you can sense that strange power emanates from her."

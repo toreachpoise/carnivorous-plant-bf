@@ -1,8 +1,8 @@
 # ARE: out of sheer laziness I'm just writing this directly into github on browser I'm sure it will be buggy as all fuck
 
 label chapter3:
-scene apartment
-### bg apartment
+scene living room dark
+with dissolve
 "Your apartment. Dishes in the sink, mold in the dishes."
 "A trail of clothes leads continuously from the front door to the bed, then the bathroom."
 extend " All yours, of course."
@@ -67,6 +67,10 @@ if ((soil == False) or (light == False) or (water == False)):
             if optimism < 5:
                 extend " ... somewhere in this mess."
             "You take a second to survey the architecture of your apartment, if it can be called architecture."
+            if light == False:
+                scene living room dark
+            else:
+                scene living room light
             "Directly in front of you is your couch and the coffee table. To the right are doors leading to your bedroom and the bathroom."
             "To the left is the kitchen with a large window over the counter. Beyond the couch is your dining table, and further is a screen door to the balcony."
             label locationselect:
@@ -87,6 +91,12 @@ if ((soil == False) or (light == False) or (water == False)):
                         p "I gotta choose somewhere else I think. Even with the curtains open the light won't reach here."
                         jump locationselect
                     "right by the window in the kitchen":
+                        if light == False:
+                            scene kitchen dark
+                            with dissolve
+                        else:
+                            scene kitchen light
+                            with dissolve
                         if brains >= 0: #checks if you chose the wrong option first lol, this will only work once
                             $ brains += 3
                         else:
@@ -97,6 +107,7 @@ if ((soil == False) or (light == False) or (water == False)):
                         if light == False:
                             "The [boyfriend] would probably be even happier if the blinds were open ..."
                         "You step back to admire your handiwork."
+                        scene table light with dissolve
                         p "There, if nothing else this place looks a bit more like a house with a plant in it now."
                         "And you'll do the dishes ... later ..."
                         $ soil = True
@@ -106,6 +117,8 @@ if ((soil == False) or (light == False) or (water == False)):
                             $ brains += 1
                         "The plant seems to get lighter in weight the closer you get to a window, and heavier the further you bring it into the murk of the room."
                         p "So, yeah. It wants to be near a window obviously."
+                        scene table light
+                        with dissolve
                         "Your dining table is more like a desk; you rarely eat there."
                         "At one end of the table is your computer setup."
                         if optimism > 5:
@@ -123,7 +136,11 @@ if ((soil == False) or (light == False) or (water == False)):
             p "My boyfriend definitely needs light."
             "The two main windows in your house are in the kitchen and the dining area at the end of your living room."
             if optimism < 0:
+                scene bedroom
+                with dissolve
                 "Your bedroom is a windowless box barely large enough for your bed ..."
+            scene table light 2
+            with dissolve
             "When you open the curtains by your dining table you're almost blinded."
             "Outside the sun is setting, and as your eyes adjust you realize you've never noticed how nice the view of the sunset is here."
             "You pull open the windows, in case fresh air is also a thing plants need."
@@ -140,6 +157,8 @@ if ((soil == False) or (light == False) or (water == False)):
                     $ water = True
                     jump plantsetup
 else:
+    scene table light 2
+    with dissolve
     "You admire your handiwork. Your [boyfriend] plant looks lovely in his little pot, casting a long shadow through the orange sunset glow that now fills the room."
 
 p "Well, he looks nice I guess ..."
@@ -152,6 +171,7 @@ p "Guess I'm done with these instructions."
 p "Is that ... a steak?"
 p "Okay, sure I guess it would be romantic to go out to eat together at some point or whatever."
 p "For now though, let's see what's in the fridge."
+scene kitchen light
 ### CG??
 "Old milk, crumpled foil with trace amounts of butter."
 "You spot most of a log of salami, and some lettuce that should be used now, if not yesterday."
@@ -159,7 +179,7 @@ p "For now though, let's see what's in the fridge."
 label chapter3minigame:
 menu:
     "try minigame?":
-        jump minigame
+        ARE "just kidding it's not ready yet"
     "skip":
         pass
 
