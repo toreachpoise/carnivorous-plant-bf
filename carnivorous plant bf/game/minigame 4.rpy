@@ -343,8 +343,9 @@ init python:
             renpy.Displayable.__init__(self)
             self.level = "level 1"
             self.window_size = Vector(1920, 960)
-            self.keyboard = {"left": False, "right": False, "space": False, "enter": False}
-            self.keyboard_held = {"left": False, "right": False, "space": False, "enter": False}
+            # self.keyboard = {"left": False, "right": False, "space": False, "enter": False}
+            # self.keyboard_held = {"left": False, "right": False, "space": False, "enter": False}
+            self.keyboard_held = {"chop": False, "swap": False}
             self.first_render = True
             self.game_over = False
             # self.song = "/audio/neonsigns.wav"
@@ -387,17 +388,19 @@ init python:
             # also for this, we track if a key is held so that we only fire the function when it's pressed but not held
 
             if ev.type == pygame.KEYDOWN:
-                if ev.key == pygame.K_SPACE:
-                    if self.keyboard_held["space"] == False:
-                        self.keyboard["space"] = True
-                        self.keyboard_held["space"] = True
+                if ev.key == pygame.K_a:
+                    if self.keyboard_held["chop"] == False:
+                        self.keyboard_held["chop"] = True
                         player.chop()
+                if ev.key == pygame.K_d:
+                    if self.keyboard_held["swap"] == False:
+                        self.keyboard_held["swap"] = True
                         cur_level.swap_ingredient()
-                    else:
-                        self.keyboard["space"] = False
             if ev.type == pygame.KEYUP:
-                if ev.key == pygame.K_SPACE:
-                    self.keyboard_held["space"] = False
+                if ev.key == pygame.K_a:
+                    self.keyboard_held["chop"] = False
+                if ev.key == pygame.K_d:
+                    self.keyboard_held["swap"] = False
             # if ev.type == pygame.KEYDOWN:
             #     if ev.key == pygame.K_LEFT:
             #         self.keyboard["left"] = True
