@@ -113,6 +113,8 @@ init python:
             if hit:
                 hit_or_miss_indicator.set_state("hit")
                 renpy.music.play("/audio/good-chop-"+path_end+".mp3", loop = False)
+                cur_level.get_active_ingredient().progress += 1
+                sandwich_display.display_ingredient_progress()
             else:
                 hit_or_miss_indicator.set_state("miss")
                 # renpy.music.play("/audio/miss-cut-"+path_end+".wav", loop = False) #can't find a second good 'cut self sound'
@@ -127,6 +129,9 @@ init python:
             Sprite.__init__(self, width, height, x, y)
             self.image = Transform(Image(image), xzoom=zoom,yzoom=zoom)
             self.zoom = zoom
+
+        def crop(self,x,y,width,height):
+            self.image = Transform(self.image,crop=(x,y,width,height))
 
     class Time():
         def __init__(self):
@@ -311,18 +316,47 @@ init python:
                 ingredient_img.render(render,st,at)
             self.active_icon_img.render(render,st,at)
 
+    class SandwichDisplay():
+        def __init__(self):
+                self.overlay_x_pos = 3*display_width/4
+                self.overlay_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,self.overlay_x_pos,0)
+                self.bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,self.overlay_x_pos,0)
+                self.ingredient_progress_images = []
+                self.display_ingredient_progress()
+
+        def display_ingredient_progress(self):
+            self.ingredient_progress_images = []
+
+            index = 0
+
+            for ingredient in cur_level.ingredients:
+                cur_img = GameImage(ingredient.image_path,ui_scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
+                # crop the image so that it's a fraction of its width equal to how much of it has been chopped so far
+                cur_img.crop(0,0,int(ingredient.image_width * (ingredient.progress / ingredient.beats_req)),300)
+                self.ingredient_progress_images.append(cur_img)
+                index += 1
+
+        def render(self, render, st, at):
+            self.overlay_img.render(render,st,at)
+            self.bread_img.render(render,st,at)
+
+            for img in self.ingredient_progress_images:
+                img.render(render,st,at)
 
     class LevelIngredient():
-        def __init__(self, name, timing, image_path):
+        def __init__(self, name, beats_req, image_path, image_width):
             self.name = name
-            self.timing = timing
+            self.progress = 0
+            self.beats_req = beats_req
             self.image_path = image_path
+            self.image_width = image_width
 
     class Level():
-        def __init__(self, ingredients):
+        def __init__(self, ingredients, timing):
             self.ingredients = ingredients
             self.cur_ingredient_index = 0
             self.max_ingredient_index = len(self.ingredients)
+            self.timing = timing
 
         def swap_ingredient(self):
             if self.cur_ingredient_index < (self.max_ingredient_index - 1):
@@ -343,8 +377,6 @@ init python:
             renpy.Displayable.__init__(self)
             self.level = "level 1"
             self.window_size = Vector(1920, 960)
-            # self.keyboard = {"left": False, "right": False, "space": False, "enter": False}
-            # self.keyboard_held = {"left": False, "right": False, "space": False, "enter": False}
             self.keyboard_held = {"chop": False, "swap": False}
             self.first_render = True
             self.game_over = False
@@ -356,15 +388,21 @@ init python:
         def render(self, width, height, st, at):
             time.update()
             display = renpy.Render(display_width, display_height)
-            # # background.render(display, st, at)
-            for img in game_images:
-                img.render(display, st, at)
+            # for img in game_images:
+            #     img.render(display, st, at)
+            
             chop_rhythm_box.update(self.keyboard)
             chop_rhythm_box.render(display,st,at)
+            
             hit_or_miss_indicator.update()
             hit_or_miss_indicator.render(display,st,at)
+
             cutting_board.render(display,st,at)
+            
+            sandwich_display.render(display,st,at)
+            
             player.render(display, st, at)
+            
             self.update()
             renpy.redraw(self, 0)
             self.first_render = False
@@ -376,7 +414,7 @@ init python:
                 self.game_over = True
                 renpy.timeout(0)
             else:
-                for beat_time in cur_level.get_active_ingredient().timing:
+                for beat_time in cur_level.timing:
                     if self.time == beat_time:
                         chop_rhythm_box.add_beat()
                 self.time += 1
@@ -464,27 +502,27 @@ init python:
             self.time = 0
             player.reset()
             cur_level.reset()
-            chop_rhythm_box.reset() # TURN THIS BACK ON ONCE BEATS ARE SPAWNED BY HANDLER
+            chop_rhythm_box.reset()
             # renpy.music.play(self.song, loop = True)
             pass
 
     time = Time()
 
-    player = Player(32, 32, 1, 1)
-    overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
-    bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
-    hit_or_miss_indicator = HitMissIndicator(20, 9*ui_scale, -20)
-
-    game_images = [overlay_box_img,bread_img]
-
-    chop_rhythm_box = ChopRhythmBox()
+    # overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
+    # bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
+    # game_images = [overlay_box_img,bread_img]
 
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
-    ingredients_list = [LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png"),LevelIngredient("chicken", [0,30,60,90,120,180,450,480],"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png")]
-    level1 = Level(ingredients_list)
+    ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
+    level1 = Level(ingredients_list,[0,30,60,90,120,180,450,480])
     cur_level = level1
+
+    player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
+    hit_or_miss_indicator = HitMissIndicator(20, 9*ui_scale, -20)
+    sandwich_display = SandwichDisplay()
+    chop_rhythm_box = ChopRhythmBox()
 
 
 default handler = Handler(player)
