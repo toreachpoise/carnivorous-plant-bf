@@ -24,6 +24,7 @@ define w = Character("The Witch", who_color="#b0eb88")
 #define n = Character("", what_color="#4927F5") ## ARE: turns out defining the narrator in this way causes issues lol
 define ARE = Character ("aaron note", what_color="#82f0d7", who_color="#F54927")
 define b = Character("boyfriend")
+define d = Character("dogtective")
 
 # IMAGES
 # bgs
