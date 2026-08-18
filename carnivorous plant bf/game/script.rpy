@@ -21,6 +21,7 @@ default blood_question = False
 default expenses_question = False
 default love_question = False
 default dog_question = False
+default player_bled_ch5 = False
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
