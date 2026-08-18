@@ -36,7 +36,7 @@ label chapter1:
 
 
     scene greenhouse 2
-    show witch
+    show witch blink
     with dissolve
     "Her hair is messy and her long nails are undoubtedly full of dirt."
     "She's beautiful, in a haven't slept in three weeks kind of way."
@@ -44,13 +44,14 @@ label chapter1:
     w "Welcome to the Magic Plant Shop(TM), where wishes really do grow on trees. What is your heart's desire?"
     "She doesn't even look up at you. Her voice has the sing-song quality of having delivered this monologue hundreds of times before."
     p "I want ... uh ... a boyfriend ...?"
-    ### witch looks up at you
+    show witch neutral
     w "You know you don't have to hire a witch on the black market for that, right? They have men at most bars."
     p "not for me ....."
-    ### looks back down
+    show witch blink
     w "Ouch. Well, it's your eternal soul I guess."
+    "She grabs a piece of paper from under the desk."
+    show witch writing
     w "... a boyfriend ..."
-    ### looks at you
     extend "can you describe this boyfriend please?"
 
 label boyfrienddescription:
@@ -66,10 +67,12 @@ label boyfrienddescription:
             no_bf_description = False
     p "[boyfriend_description]"
     if no_bf_description == True:
+        show witch writing disgusted
         w "Wow ... Have you just not put any thought into it or what?"
         w "Seems like if you want to meet someone it would be good to know what kind of person you want to meet."
         p "Look, I just, I don't know how to describe it."
         extend " I don't have a lot of experience with these things ..."
+        show witch writing
         w "Damn."
         menu:
             " ... That's all she has to say? She's kinda ..."
@@ -78,11 +81,11 @@ label boyfrienddescription:
             "an asshole":
                 pass
     else:
-        ### disgusted
+        show witch writing disgusted
         w "Well, I guess people like to stick their bits into and/or have their bits invaded by all sorts of things ..."
     if name_set == True:
         jump signcontract
-
+    show witch writing
     w "So what's your name, anyway, for the contract?"
     " ... Contract?"
 label namesetting:
@@ -110,9 +113,11 @@ label namesetting:
 label nameset:
     $ name_set = True
     "Her tone becomes weirdly official again."
+    show witch robo
     w "Now remember, like I told you before. You'll have to feed and water your boyfriend for as long as you live."
     "She didn't say that before, but like, isn't that true of most plants?"
     "Wait, as long as *I* live?"
+    show witch neutral
     w "This is a till-death-do-us-part situation. He's going to love you forever whether you like it or not."
     w "And remember, you have to feed him."
     "Why does she keep saying that?"
@@ -131,18 +136,20 @@ label nameset:
 
 label signcontract:
     w "Okay. {nw}"
-    ### she hands you the paper
+    show witch reaching blink
     extend " ... "
+    show witch reaching
     extend "Sign at the bottom."
     window hide
+    show witch reaching blink
     w "Okay, well, good luck."
-    ### disgust
+    show witch disgusted
     w "Since you apparently just want to fuck the plant, I guess you can go to the greenhouse and pick one out yourself."
     w "You can leave through the back door of the greenhouse."
     "She clearly doesn't want to see you again ..."
     w "And don't try taking two. I can see you on the security camera ... and you honestly couldn't handle it."
     w "Oh, and here's the manual."
-    ### handing paper
+    show witch reaching
     extend " Please be sure to read it thoroughly, your life depends on it!"
     w "Thank you for coming to the Magic Plant Shop, please give us a good review on Boogle Maps~!"
     $ chapter = 2
