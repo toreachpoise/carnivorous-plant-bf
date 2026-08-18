@@ -1,5 +1,5 @@
 ﻿# The script of the game goes in this file.
-    ## ARE: in previous projects ive just used this space to declare variables
+    ## ARE: as in previous projects ive just used this space to declare variables
     ## and do chapter selection and the like; nothing happens till chapter 1
 
 # VARIABLES
