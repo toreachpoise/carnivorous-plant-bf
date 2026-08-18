@@ -81,5 +81,7 @@ label start:
                 jump chapter2
             if chapter == 3:
                 jump chapter3
+            if chapter == 4:
+                jump chapter4
 
     return
