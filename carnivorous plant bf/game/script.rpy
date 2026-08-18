@@ -16,6 +16,10 @@ default water = False
 default light = False
 default fed_plant = 0
 default slept_together = False
+default dog_questions = 0
+default blood_question = False
+default expenses_question = False
+default love_question = False
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
