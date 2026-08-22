@@ -84,5 +84,20 @@ label start:
                 jump chapter3
             if chapter == 4:
                 jump chapter4
+            if chapter == 5:
+                jump chapter5
+            if chapter == 6:
+                jump chapter6
+            else:
+                "More coming soon ..."
+                extend " we hope!"
+                menu:
+                    "Play Again?"
+                    "Replay Story":
+                        jump chapter1
+                    "Minigame":
+                        jump minigame
+                    "Quit":
+                        pass
 
     return

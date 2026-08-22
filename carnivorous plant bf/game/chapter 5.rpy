@@ -129,12 +129,14 @@ b "But now? I need to rest."
 p "{i}He's looking at me expectantly ... I guess he wants to know if I'll sleep by him, but he's nervous to ask?{/i}"
 menu:
     "sleep with the plant":
+        $ slept_together = True
         $ optimism += 5
         p "Yeah, it's been a big and uh ... confusing day for sure. I wouldn't mind lying down on the couch near you too."
         "Every fiber of your plant seems to let out a tension it was carrying. The roots settle their wriggling into a gentle breathing pulse around the room."
         "As you drift off together, your fingers and his roots entangle in each other."
     "don't":
         $ optimism -= 5
+        $ slept_together = False
         p "I'm. Um. I'm not really tired. Kinda buzzing actually."
         p "I'll be in my room but ... I'll see you in the morning."
         b "Oh. Okay, cool. Good night."

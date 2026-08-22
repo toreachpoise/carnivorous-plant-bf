@@ -134,7 +134,7 @@ label doginterview:
                 p "{i}If people are going missing that's really scary, right?{/i}"
                 if brains > 2:
                     p "{i}And if I'm being honest I feel like I kind of am getting an inkling of how ...{/i}"
-                p "p "{i}... but ... I feel like I'm starting to love that little plant ...{/i}"
+                    p "{i}... but ... I feel like I'm starting to love that little plant ...{/i}"
             else:
                 p "{i}I love my little [boyfriend]. He's so sweet and weird and cute.{/i}"
                 p "{i}Sure the disappearances sound scary but ...{nw}{/i}"
@@ -186,18 +186,18 @@ label doginterview:
                     p "I like my neighbors and my coworkers well enough. Especially Ms Espera next door. She brings me food sometimes."
                     p "I try to spend as much time as I can with my friends too, online and in person. We play games. We go swimming in the lake in the summer when we can."
                     p "But they're all busy, y'know? I don't have my Person. The one person my life revolves around."
-                    p "... Isn't that how it's supposed to be?"
-                d "I just don't think love is worth all that, y'know, risking your life for?"
-                p "Woof, I mean, isn't that kind of bleak? Without love what is there? Isn't that all we have?{nw}"
-                d "BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARK BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARKBARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarBARKBARKBARkbark BARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARK{nw}"
-                "She barks uncontrollably for about a minute before stopping."
-                "Now she's looking off to the side, looking embarrassed."
-                p "What the hell was that?"
-                d "Sorry ... you said bark. I misread the situation."
-                p "..."
-                $ love_question = True
-                $ dog_questions += 1
-                jump doginterview
+            p "... Isn't that how it's supposed to be?"
+            d "I just don't think love is worth all that, y'know, risking your life for?"
+            p "Woof, I mean, isn't that kind of bleak? Without love what is there? Isn't that all we have?{nw}"
+            d "BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARK BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARKBARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarBARKBARKBARkbark BARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARK{nw}"
+            "She barks uncontrollably for about a minute before stopping."
+            "Now she's looking off to the side, looking embarrassed."
+            p "What the hell was that?"
+            d "Sorry ... you said bark. I misread the situation."
+            p "..."
+            $ love_question = True
+            $ dog_questions += 1
+            jump doginterview
         "Okay, but like, why are you a dog?" if (dog_question == False):
             d "What are you, a cop? Some kind of speciesist?"
             menu:
