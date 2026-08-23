@@ -72,8 +72,14 @@ if boyfriend == "foxglove":
 else:
     "It sighs despite having no mouth. A whistle of breath from nowhere."
 b "I've liked my time with you. I didn't want to scare you ... more than I do."
+if optimism < 6:
+    $ skeptical_comment = True
+elif brains > 2:
+    $ skeptical_comment = True
+else:
+    $ skeptical_comment = False
 menu:
-    "I liked it too, for what it's worth" if (optimism > -2) OR (brains < 2):
+    "I liked it too, for what it's worth" if (optimism > -2):
         $ optimism += 5
         p "It's been strange, but. It's been a beautiful experience."
         if brains > 2:
@@ -87,13 +93,13 @@ menu:
             "His flowers perk up, some of the lips quirk with little smiles."
         if boyfriend == "orb":
             "The orb shines brighter again."
-    "Is there anything else you aren't telling me?" if (optimism < 6) OR (brains > 2):
+    "Is there anything else you aren't telling me?" if skeptical_comment:
         $ optimism -= 2
         $ brains += 2
         b "..."
         p "Please. At this point all you've done is hide things from me."
         b "I don't think I should."
-        extend "This won't help you, and it wouldn't be fair."
+        extend " This won't help you, and it wouldn't be fair."
         p "I don't care. I want to know what I'm choosing before I choose for once."
         b "I guess I owe you that much at least ..."
         b "Today, either I grant your wish and bloom, or ..."
@@ -101,12 +107,12 @@ menu:
         b "Or I die. Or my body consumes itself, and I fade from this world."
         p "...{nw}"
         p "Oh."
-        if (boyfriend == "flytrap") OR (boyfriend == "spider") OR (boyfriend == "foxglove"):
-            "His many heads droop."
         if boyfriend == "thistle":
             "His big eyestalk droops."
-        if boyfriend == "orb":
+        elif boyfriend == "orb":
             "The orb's light wavers."
+        else:
+            "His many heads droop."
         b "I didn't want you to know. I want you to choose as you wish. That's what I was cultivated to give you."
 b "I'm sorry, but time is up now."
 b "I can feel the new world starting to bloom inside me. You need to choose. Your life here, or your wish?"
@@ -119,7 +125,7 @@ menu:
         "Even though your [boyfriend] has only been gone a few weeks, most things are back to normal."
         "The vines and roots that had grown all through your building shriveled back into themselves."
         "The [boyfriend] contracted into something tiny, a mass of roots and old stalks barely larger than your hand."
-        "Even the memories of him are leaving. Ms Espera's dog seems to have forgiven you, even you're forgetting about him a little more each day."
+        "Even the memories of him are leaving. Ms Espera's dog seems to have forgiven you. Even you're forgetting about your [boyfriend] a little more each day."
         "But you have one lesson from your plant boyfriend that you won't let go of."
         "You pull a fresh raspberry from the bush you planted, and take a bite."
         "You know that if you keep a seed safe, if you feed and protect it as it grows, that its fruit will one day emerge, for you to have and to share with the people around you."
@@ -135,6 +141,7 @@ menu:
         "As you spin, the two of you are constant, the center of all that exists."
         "Finally, your greatest desire."
 scene aquarium with fade
+"..."
 ARE "Thank you so much for playing the demo version of Carnivorous Plant Boyfriend!"
 ARE "This game was created in Ren'Py as an entry to the 2026 Trans Representation Game Jam."
 ARE "The concept was created by Aaron El Sabrout and Rhys Maxwell."

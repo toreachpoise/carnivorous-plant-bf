@@ -104,7 +104,11 @@ b "I don't know what it's worth, but I'm sorry."
 b "I get so hungry ... That's not an excuse but. It is my nature."
 b "I get hungry, and I grow, and when I get big enough I can do impossible things."
 b "I'd like to show you one of those impossible things, if you'd like. Would that be okay?"
-if (player_bled_ch5) OR (optimism < 5): #or if bled during minigame
+if player_bled_ch5: 
+    $ skeptical_comment = True
+if optimism < 5:
+    $ skeptical_comment = True
+if skeptical_comment:
     p "How do I know I can trust you? I'm still bleeding from the last wounds you gave me."
     b "I know. Please. Just let me help ..."
 "A thin vine caresses over your wounds, spreading a glowing balm that tingles against your flesh. Bruises fade. Cuts seal themselves. Your pain is gone."
@@ -146,6 +150,7 @@ menu:
         "You go to your room, trying not to turn your back on it the whole time."
         p "......"
         p "What have I done?"
+"..."
 $ chapter = 6
 jump start
         

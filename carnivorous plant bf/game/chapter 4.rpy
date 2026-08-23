@@ -10,6 +10,7 @@ label chapter4:
         "You pull the covers off and unbar the door."
         scene living room light with dissolve
         "You feel relieved and then a little silly to see that the [boyfriend] has not somehow moved from its perch in the night."
+    scene table light
     if boyfriend == "flytrap":
         show flytrap with dissolve
     if boyfriend == "spider":
@@ -22,7 +23,7 @@ label chapter4:
         show orb with dissolve
     b "Mmh?"
     "He's kinda cute."
-    extend "Not really in like a boyfriend way yet, more like a pet way."
+    extend " Not really in like a boyfriend way yet, more like a pet way."
     if boyfriend == "flytrap":
         "His little heads are still droopy with sleep."
     if boyfriend == "spider":
@@ -39,14 +40,14 @@ label chapter4:
     extend "Sleepem. Hungrem. Brafiss?"
     "Half asleep it seems ... less sentient, less human."
     "He looks sad, a bit forlorn. But still cute."
-    extend "And still hungry."
+    extend " And still hungry."
     p "Breakfast?"
     "The [boyfriend] nods, each gentle shake wilting him toward the window."
-    scene kitchen with wipeleft
+    scene kitchen light with wipeleft
     p "Huh ..."
     "Your fridge is even more bare than yesterday. Amazing how that happens. A fly emerges from inside as you open it."
     p "Well, I guess I gotta buy something then."
-    scene living room with wiperight
+    scene table light with wiperight
     if boyfriend == "flytrap":
         show flytrap
     if boyfriend == "spider":
@@ -57,17 +58,21 @@ label chapter4:
         show thistle
     if boyfriend == "orb":
         show orb
-    p "How about you just keep sleeping, and I'll go get some eggs from the convenience store around the block."
+    p "How about you just keep sleeping, and I'll go get some eggs from the convenience store around the block?"
     b "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
     p "..."
-    p "{i}How is he snoring without making any noise?{/i}"
+    if boyfriend == "foxglove":
+        "The snore emanates from all of his mouths. It's so weird."
+    else:
+        p "{i}How is he snoring without making any noise?{/i}"
 
     scene outside light with dissolve
     "Gray clouds have kept it cooler than usual outside, enough that morning dew still clings to the ground even as we decidedly have passed the morning."
     "You realize only a few steps into your journey that you forgot to bring a grocery bag."
+    scene underpass with wipeleft
     "Ugh, screw it. You can get one more reusable one, right?"
-    scene alley with wipeleft
     "You're trying to think of a clever way to describe this to your [boyfriend] when you get home."
+    scene alley with wipeleft
     "Some way of framing the irony of buying another, somehow equally disposable but thicker plastic bag to care for your plant."
     "As you're lost in this thought, a large and dangerous looking lady steps into your path."
     show dogtective with move
@@ -78,7 +83,7 @@ label chapter4:
     show dogtective at left with move
     "You move to step aside.{nw}"
     show dogtective at center with hpunch
-    extend "But she's faster and stronger, and blocks you again."
+    extend " But she's faster and stronger, and blocks you again."
     d "That's gross but actually what I'm here to talk to you about."
     "Her serious expression softens."
     d "Please, I think you might be in danger."
@@ -122,7 +127,7 @@ label doginterview:
             $ blood_question = True
             $ dog_questions += 1
             jump doginterview
-        "Did the missing people have any weird expenses before they vanished?" if (expns +enses_question == False):
+        "Did the missing people have any weird expenses before they vanished?" if (expenses_question == False):
             $ brains += 1
             d "Hmm ... yeah, actually."
             d "Each person before they disappeared started spending a lot of money on groceries. Like, enough food to host a holiday dinner for 20 people."
@@ -169,9 +174,10 @@ label doginterview:
                     $ dog_questions += 1
                     jump doginterview
         "Do you believe in risking it all for love?" if (love_question == False):
+            $ optimism += 1
             "Her expression becomes puzzled."
             d "I don't know what that means."
-            d "But I do know that a worrying number of the cases involved people being worried about their romantic entanglements."
+            d "But I do know that a worrying number of the cases involved people being obsessed about their romantic entanglements."
             d "Tell me, [player_name], are you lonely? Are you looking for love?"
             menu:
                 "I am alone ...":
@@ -191,7 +197,7 @@ label doginterview:
             p "Woof, I mean, isn't that kind of bleak? Without love what is there? Isn't that all we have?{nw}"
             d "BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARK BARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarkbark BARKBARKBARKBARKBARKBARKBARK BARKBARKBARKBARKBARKBARKBARKBARK barkbarBARKBARKBARkbark BARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARKBARK{nw}"
             "She barks uncontrollably for about a minute before stopping."
-            "Now she's looking off to the side, looking embarrassed."
+            "Now she's gazing off to the side, looking embarrassed."
             p "What the hell was that?"
             d "Sorry ... you said bark. I misread the situation."
             p "..."
@@ -206,14 +212,17 @@ label doginterview:
                     $ dog_question = True
                     $ dog_questions += 1
                     jump doginterview
-        "(Move on)" if (dog_questions > 2):
-            pass
+        "(Move on)" if (dog_questions > 1):
+            if blood_question == False:
+                $ brains -= 1
+            if expenses_question == False:
+                $ brains -= 1
 
 "At last the dogtective steps out of your way."
-hide dogtective with dissolve
+scene shopping arcade with wipeleft
 "You carry on with your gray morning walk, questions dancing in your head as you pick up groceries."
+"The wound on your hand is still tender as you walk back home, with your newly purchased grocery bag digging into your grip."
 scene underpass with wipeleft
-"The wound on your hand is still tender on the way back home, as your newly purchased grocery bag digs into your grip."
-
+"..."
 $ chapter = 5
 jump start

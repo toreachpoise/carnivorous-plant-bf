@@ -17,28 +17,26 @@ menu:
     "ever, actually.":
         pass
 
-
-"Your [boyfriend]'s leaves remain furled.{nw}"
 if boyfriend == "flytrap":
     show flytrap
-    "Your [boyfriend]'s leaves remain furled. {fast}The heads no longer seem to be dancing and are kind of downcast."
+    "Your [boyfriend]'s leaves remain furled. The heads no longer seem to be dancing and are kind of downcast."
 if boyfriend == "spider":
     show spider
-    "Your [boyfriend]'s leaves remain furled. {fast}Most of its eyes are closed or look drowsily off at the walls."
+    "Your [boyfriend]'s leaves remain furled. Most of its eyes are closed or look drowsily off at the walls."
 if boyfriend == "foxglove":
     show foxglove
-    "Your [boyfriend]'s leaves remain furled. {fast}The lips on each of their blossoms aren't as shiny anymore, they're dull and chapped looking now."
+    "Your [boyfriend]'s leaves remain furled. The lips on each of their blossoms aren't as shiny anymore, they're dull and chapped looking now."
 if boyfriend == "thistle":
     show thistle
-    "Your [boyfriend]'s leaves remain furled. {fast}The thorns are still as sharp but the big eyestalk is drooping somewhat."
+    "Your [boyfriend]'s leaves remain furled. The thorns are still as sharp but the big eyestalk is drooping somewhat."
 if boyfriend == "orb":
     show orb
-    "Your [boyfriend]'s leaves remain furled. {fast}The fleshly leaves look a little pruney, and you could swear the orb is a little smaller."
+    "Your [boyfriend]'s leaves remain furled. The fleshly leaves look a little pruney, and you could swear the orb is a little smaller."
 
 p "I guess I should figure out how to take care of this little guy, huh?"
 p "Maybe I should take a look at the instructions that Witch gave me ...{nw}"
 menu:
-    p "Maybe I should take a look at the instructions that Witch gave me ..."
+    p "Maybe I should take a look at the instructions that Witch gave me ...{fast}"
     "Take a look":
         ### cg???
         $ brains += 1
@@ -61,7 +59,7 @@ if ((soil == False) or (light == False) or (water == False)):
     p "So the basic things a plant needs are ...{nw}"
     menu:
         p "So the basic things a plant needs are ...{fast}"
-        "Soil." if (soil == False):
+        "Soil." if (location == "none"):
             p "I guess he's already in a pot."
             p "Maybe let's just find him a place to live."
             if optimism < 5:
@@ -107,10 +105,9 @@ if ((soil == False) or (light == False) or (water == False)):
                         if light == False:
                             "The [boyfriend] would probably be even happier if the blinds were open ..."
                         "You step back to admire your handiwork."
-                        scene table light with dissolve
                         p "There, if nothing else this place looks a bit more like a house with a plant in it now."
                         "And you'll do the dishes ... later ..."
-                        $ soil = True
+                        $ location = "kitchen"
                         jump plantsetup
                     "on the dining table kinda near the balcony":
                         if brains >= 0:
@@ -130,7 +127,7 @@ if ((soil == False) or (light == False) or (water == False)):
                         p "There, if nothing else this place looks a bit more like a house with a plant in it now."
                         if light == False:
                             "The [boyfriend] would probably be even happier if the curtains were open ..."
-                        $ soil = True
+                        $ location = "dining"
                         jump plantsetup
         "Light." if (light == False):
             p "My boyfriend definitely needs light."
@@ -139,7 +136,7 @@ if ((soil == False) or (light == False) or (water == False)):
                 scene bedroom
                 with dissolve
                 "Your bedroom is a windowless box barely large enough for your bed ..."
-            scene table light 2
+            scene table dark
             with dissolve
             "When you open the curtains by your dining table you're almost blinded."
             "Outside the sun is setting, and as your eyes adjust you realize you've never noticed how nice the view of the sunset is here."
@@ -149,15 +146,30 @@ if ((soil == False) or (light == False) or (water == False)):
             jump plantsetup
         "Water." if (water == False):
             p "I should have gotten a watering can, huh?"
+            if light == True:
+                scene kitchen light
+            else:
+                scene kitchen dark
             "You find the least dirty bowl you've got and fill it with tap water."
             "Water splashes over the rim as you carry it over to your plant."
+            if location == "none":
+                if light == True:
+                    scene living room light
+                else:
+                    scene living room dark
+            else:
+                if light == True:
+                    scene table light
+                else:
+                    scene table dark
+            
             menu:
                 "Pour the water.":
                     "You tip the bowl towards the planter and clean water spills over the [boyfriend] in a steady fall, soaking the soil."
                     $ water = True
                     jump plantsetup
 else:
-    scene table light 2
+    scene table dark
     with dissolve
     "You admire your handiwork. Your [boyfriend] plant looks lovely in his little pot, casting a long shadow through the orange sunset glow that now fills the room."
 
@@ -186,7 +198,7 @@ menu:
 label chapter3minigamedone:
 scene kitchen light with dissolve
 menu:
-    "cut":
+    "(got cut while preparing sandwich)":
         "You drive the knife down, expecting to cut meat, but it knicks your own flesh instead."
         "Your face scrunches as you feel the shock of pain, and the knife slips from your hand."
         "You don't hear it fall."
@@ -215,7 +227,7 @@ menu:
             "The drops are drawn magically from your fingers into the air."
             "They swirl about the orb and then become absorbed into it."
         jump alittlemore
-    "didn't cut":
+    "(didn't get cut)":
         "Your finished sandwich is nothing special, but it was made with care."
         "You approach the plant with it feeling ..."
         extend " nervous? Ridiculous? Both?"
@@ -256,7 +268,7 @@ menu:
         "After a little resistance he releases you, and shifts back sheepishly."
         jump ch3end
     "Indulge him":
-        if (boyfriend == spider) or (boyfriend == flytrap) or (boyfriend == thistle):
+        if (boyfriend == "spider") or (boyfriend == "flytrap") or (boyfriend == "thistle"):
             "Your eyes meet his, and you give the slightest nod."
         else:
             "Your eyes meet what answer for his, and you give the slightest nod."
@@ -278,8 +290,8 @@ if boyfriend == "flytrap":
 if boyfriend == "spider":
     "His hands snatch the sandwich up, tearing it to bits and disappearing it down his many throats."
 if boyfriend == "foxglove":
-    "He inhales with such force the sandwich is sucked into one of his mouths."
-    "As he gulps, you can see the sandwich travel down one of its tubular throats for a moment before it vanishes."
+    "He inhales with such force with each mouth that the sandwich is shredded through each set of lips."
+    "You see the fragments travel down each of its tubular throats for a moment before it vanishes."
 if boyfriend == "thistle":
     "He smashes and smashes and smashes it into bits and blinks the crumbs into his great eye."
 if boyfriend == "orb":
@@ -331,7 +343,7 @@ menu:
         "Sleep does not come easily, but eventually it takes hold and you drift off."
         $ slept_together = False
         scene bedroom with fade
-        pause 2
+        "..."
         $ chapter = 4
         jump start
     "What if it's exactly what I wanted?":
@@ -353,6 +365,7 @@ menu:
         "You bring a blanket and pillow to your couch, it's easier at this point than moving your plant."
         "He shifts toward you as he finds his own comfortable position."
         "Your fingers and his leaves drift together as you both drift off."
+        "..."
         $ slept_together = True
         $ chapter = 4
         jump start

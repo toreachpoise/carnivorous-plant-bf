@@ -171,7 +171,7 @@ if optimism < 3:
 p "*sigh* ... Time to bring him home."
 scene plant store exterior 2
 with dissolve
-pause 2
+"......"
 
 $ chapter = 3
 jump start

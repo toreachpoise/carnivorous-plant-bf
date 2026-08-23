@@ -116,7 +116,7 @@ label nameset:
     show witch robo
     w "Now remember, like I told you before. You'll have to feed and water your boyfriend for as long as you live."
     "She didn't say that before, but like, isn't that true of most plants?"
-    "Wait, as long as *I* live?"
+    p "Wait, as long as *I* live?"
     show witch neutral
     w "This is a till-death-do-us-part situation. He's going to love you forever whether you like it or not."
     w "And remember, you have to feed him."
@@ -147,10 +147,12 @@ label signcontract:
     w "Since you apparently just want to fuck the plant, I guess you can go to the greenhouse and pick one out yourself."
     w "You can leave through the back door of the greenhouse."
     "She clearly doesn't want to see you again ..."
+    show witch neutral
     w "And don't try taking two. I can see you on the security camera ... and you honestly couldn't handle it."
     w "Oh, and here's the manual."
     show witch reaching
     extend " Please be sure to read it thoroughly, your life depends on it!"
+    show witch neutral
     w "Thank you for coming to the Magic Plant Shop, please give us a good review on Boogle Maps~!"
     $ chapter = 2
 

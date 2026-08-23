@@ -396,10 +396,10 @@ screen main_menu():
         vbox:
             style "main_menu_vbox"
 
-            text "[config.name!t]":
-                style "main_menu_title"
+            #text "[config.name!t]":
+                #style "main_menu_title"
 
-            text "[config.version]":
+            text "{b}[config.version]{/b}":
                 style "main_menu_version"
 
 
@@ -421,7 +421,8 @@ style main_menu_vbox:
     xoffset -30
     xmaximum 1200
     yalign 1.0
-    yoffset -30
+    yoffset -50
+    background "gui/namebox.png" #idk if this did anything lol whatever
 
 style main_menu_text:
     properties gui.text_properties("main_menu", accent=True)
@@ -431,6 +432,7 @@ style main_menu_title:
 
 style main_menu_version:
     properties gui.text_properties("version")
+    color "111111"
 
 
 ## Game Menu screen ############################################################

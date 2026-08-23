@@ -11,7 +11,7 @@ default chapter = 1
 default optimism = 0 ## ARE: not sure if this will even be a game mechanic but i'm tracking it lol
 default brains = 0 ## idk lmao
 default boyfriend = "flytrap"
-default soil = False
+default location = "none"
 default water = False
 default light = False
 default fed_plant = 0
@@ -29,7 +29,7 @@ define p = Character("player_name", dynamic=True, who_color="#82f0d7")
 define w = Character("The Witch", who_color="#b0eb88")
 #define n = Character("", what_color="#4927F5") ## ARE: turns out defining the narrator in this way causes issues lol
 define ARE = Character ("aaron note", what_color="#82f0d7", who_color="#F54927")
-define b = Character("boyfriend")
+define b = Character("[boyfriend]")
 define d = Character("dogtective")
 
 # IMAGES
