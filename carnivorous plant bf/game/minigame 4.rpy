@@ -133,6 +133,9 @@ init python:
         def crop(self,x,y,width,height):
             self.image = Transform(self.image,crop=(x,y,width,height))
 
+        def change_brightness(self,brightness):
+            self.image = Transform(self.image,matrixcolor=BrightnessMatrix(brightness))
+
     class Time():
         def __init__(self):
             self.time = 0
@@ -323,6 +326,17 @@ init python:
                 self.bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,self.overlay_x_pos,0)
                 self.ingredient_progress_images = []
                 self.display_ingredient_progress()
+                self.ingredient_silhouettes = []
+                self.display_ingredient_silhouettes()
+
+        def display_ingredient_silhouettes(self):
+            index = 0
+
+            for ingredient in cur_level.ingredients:
+                cur_img = GameImage(ingredient.image_path,ui_scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
+                cur_img.change_brightness(-0.75)
+                self.ingredient_silhouettes.append(cur_img)
+                index += 1
 
         def display_ingredient_progress(self):
             self.ingredient_progress_images = []
@@ -339,6 +353,9 @@ init python:
         def render(self, render, st, at):
             self.overlay_img.render(render,st,at)
             self.bread_img.render(render,st,at)
+
+            for img in self.ingredient_silhouettes:
+                img.render(render,st,at)
 
             for img in self.ingredient_progress_images:
                 img.render(render,st,at)
