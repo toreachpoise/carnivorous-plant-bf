@@ -289,11 +289,11 @@ init python:
                 case 3:
                     self.active_icon_img.position = Vector(width * 3 / 4, y_offset + (height / 2))
 
-        def render(self, render, st, at,active_ingredient):
-            self.place_icon_image(active_ingredient)
+        def render(self, render, st, at, active_ingredient):
             self.cutting_board_img.render(render,st,at)
             for ingredient_img in self.ingredient_images:
                 ingredient_img.render(render,st,at)
+            self.place_icon_image(active_ingredient)
             self.active_icon_img.render(render,st,at)
 
     class SandwichDisplay():
@@ -400,7 +400,7 @@ init python:
             hit_or_miss_indicator.update()
             hit_or_miss_indicator.render(display,st,at)
 
-            cutting_board.render(display,st,at,cur_level.get_active_ingredient())
+            cutting_board.render(display,st,at,cur_level.cur_ingredient_index)
             
             sandwich_display.render(display,st,at)
                         
@@ -422,7 +422,6 @@ init python:
                 self.first_try = False
 
             time.update()
-            print(time.time)
 
         def event(self, ev, x, y, st):
             # calling functions that trigger on key press here seems to be the best way to guarantee they only get called once
@@ -436,7 +435,7 @@ init python:
                 if ev.key == pygame.K_d:
                     if self.keyboard_held["swap"] == False:
                         self.keyboard_held["swap"] = True
-                        self.cur_level.swap_ingredient()
+                        cur_level.swap_ingredient()
             if ev.type == pygame.KEYUP:
                 if ev.key == pygame.K_a:
                     self.keyboard_held["chop"] = False
@@ -451,12 +450,12 @@ init python:
         def instantiate_level(self,level):
             # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
             # a full bar is ~480 units of time?
-            match(level):
-                case "level 1":
-                    ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
-                    timing = [0,30,60,90,120,180,450,480]
+            # match(level):
+            #     case "level 1":
+                    
+            ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
+            timing = [0,30,60,90,120,180]
             return Level(ingredients_list, timing)
-
 
         def next_stage(self):
             if self.level == "level 1":
@@ -468,12 +467,10 @@ init python:
             self.game_over = False
             time.reset()
 
-            # print(self.cur_level)
-            # self.cur_level = instantiate_level("level 1")
-            # print(self.cur_level)
+            global cur_level
+            cur_level = self.instantiate_level(self.level)
             
             chop_rhythm_box.reset()
-            # hit_or_miss_indicator.reset()
             sandwich_display.reset()
             pass
 
@@ -506,8 +503,8 @@ screen minigame(level):
                 xalign 0.5
                 action Return()
     elif handler.stage_complete == True: #level success screen
-        $ handler.reset()
         $ handler.next_stage()
+        $ handler.reset()
         frame:
             yminimum 1080
             background "#66cc66"
