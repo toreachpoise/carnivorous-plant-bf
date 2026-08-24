@@ -11,17 +11,17 @@ menu:
     "no":
         pass
 p "alright, let's do this"
-python:
-    handler.game_over = False
-    handler.reset()
-    player.died = False
+# python:
+#     handler.game_over = False
+$ handler.reset()
+#     player.died = False
 call screen minigame("level 1")
 menu:
     "do you want to try again?"
     "yep":
         jump minigame
     "no thanks, let's skip this level":
-        $ handler.next_stage()
+        # $ handler.next_stage()
         pass
 label leveldone:
 $ handler.stage_complete = False

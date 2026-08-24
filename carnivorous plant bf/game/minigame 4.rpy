@@ -425,7 +425,7 @@ init python:
 
         def event(self, ev, x, y, st):
             # calling functions that trigger on key press here seems to be the best way to guarantee they only get called once
-            # also for this, we track if a key is held so that we only fire the function when it's pressed but not held
+            # also for this, we track if a key is held so that we only fire the function the first tick it's pressed but not every tick it's held
 
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_a:
@@ -448,20 +448,24 @@ init python:
             raise renpy.IgnoreEvent()
 
         def instantiate_level(self,level):
-            # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
-            # a full bar is ~480 units of time?
-            # match(level):
-            #     case "level 1":
-                    
-            ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
-            timing = [0,30,60,90,120,180]
-            return Level(ingredients_list, timing)
+            # print(self.stage_complete)
+
+            print(level)
+            if level == "level 1":
+                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
+            
+            return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
+            
 
         def next_stage(self):
             if self.level == "level 1":
-                self.level = "level 2"
+                self.level = "peepee"
 
         def reset(self):
+            print(self.stage_complete)
+            print(self.game_over)
+            print(cur_level.timing)
+
             self.keyboard_held = {"chop": False, "swap": False}
             self.stage_complete = False
             self.game_over = False
@@ -480,8 +484,9 @@ init python:
     # a full bar is ~480 units of time?
 
     ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
-    level1 = Level(ingredients_list,[0,30,60,90,120,180,450,480])
-    cur_level = level1
+    timing = [0,30,60,90,120,180]
+    print(timing)
+    cur_level = Level(ingredients_list, timing)
 
     player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
@@ -493,7 +498,7 @@ default handler = Handler(player)
 
 screen minigame(level):
     if handler.game_over == True: #game over screen
-        $ handler.reset()
+        # $ handler.reset()
         frame:
             yminimum 1080
             background "#cc3300"
@@ -503,8 +508,12 @@ screen minigame(level):
                 xalign 0.5
                 action Return()
     elif handler.stage_complete == True: #level success screen
-        $ handler.next_stage()
-        $ handler.reset()
+        # For some GOD FORSAKEN FUCKING REASON this evaluates even when handler.stage_complete prints as false.
+        # I don't have time to figure out why, so instead we need to set handler.next_stage() to be written somewhere else
+        # TODO: that ^
+        # $ print(handler.stage_complete)
+        # $ handler.next_stage()
+        # $ handler.reset()
         frame:
             yminimum 1080
             background "#66cc66"
