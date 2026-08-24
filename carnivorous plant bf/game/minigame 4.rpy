@@ -65,41 +65,9 @@ init python:
     class Player(Sprite):
         def __init__(self, width, height, x, y):
             Sprite.__init__(self, width, height, x, y)
-            self.position = Vector(x,y)
-            # self.position = self.start_position
-            self.width, self.height = width, height
 
             self.image = Image("/images/minigame imgs/Plant-bf-minigame-Knife.png")
-            self.slowdown_frame = 0
-            self.move_frame = 0
-
-            self.died = False
-
-            self.idle_ani = []
-            self.chop_ani = []
-
-            self.idle_ani.append(Image("/images/minigame imgs/Plant-bf-minigame-Knife.png"))
-
-            self.chop_ani.append(Image("/images/minigame imgs/Plant-bf-minigame-Knife.png"))
             
-            self.image = self.idle_ani[self.move_frame]
-
-        def update(self, keyboard):
-            self.move(keyboard)
-            self.animate()
-
-        # def move(self, keyboard):
-        #     print("no controls implemented yet")
-
-        def animate(self):
-            # control block will go here to determine current animation state, which should be just idle or chop
-            self.slowdown_frame += 1
-            if self.slowdown_frame >= 2*animationspeed:
-                self.move_frame += 1
-                self.slowdown_frame = 0
-            if self.move_frame > 7:
-                self.move_frame = 0
-
         def chop(self):
             hit = chop_rhythm_box.check_for_hit()
 
@@ -120,10 +88,6 @@ init python:
                 # renpy.music.play("/audio/miss-cut-"+path_end+".wav", loop = False) #can't find a second good 'cut self sound'
                 renpy.music.play("audio/miss-cut.mp3", loop = False)
 
-
-        def reset(self):
-            self.died = False
-
     class GameImage(Sprite):
         def __init__(self, image, zoom, width, height, x, y):
             Sprite.__init__(self, width, height, x, y)
@@ -142,6 +106,9 @@ init python:
 
         def update(self):
             self.time += 1
+
+        def reset(self):
+            self.time = 0
 
     class MultiSpriteObject():
         def __init__(self, sprites):
@@ -162,7 +129,7 @@ init python:
             self.beats = []
             self.rhythm_box_position_indic_img = GameImage("/images/minigame imgs/Plant-bf-minigame-Position-indicator.png",ui_scale,257,192,0,0)
 
-        def update(self, keyboard):
+        def update(self):
             if len(self.beats) > 0:
 
                 for beat in self.beats:
@@ -170,6 +137,11 @@ init python:
                         self.beats.remove(beat)
                     else:
                         beat.update()
+            else:
+                if cur_level.check_for_victory():
+                    handler.stage_complete = True
+                else:
+                    handler.game_over = True
 
         # called in Player by Handler when a space key event is handled
         # Returns if the hit (True) or missed (False)
@@ -203,9 +175,9 @@ init python:
 
     class ChopRhythmBeat():
         def __init__(self, position, margin, speed):
-            self.position = position
-            self.speed = speed
-            self.margin = margin
+            self.position = position #initial position, Vector
+            self.speed = speed #move speed, negative to move right to left
+            self.margin = margin #margin of error timingwise for a hit to be considered on time
             self.image = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",ui_scale,2,15,position.x,position.y)
             self.beat_end = 5*ui_scale
             self.beat_hit_h_loc = 30*ui_scale
@@ -261,6 +233,10 @@ init python:
             if time.time == self.reset_time:
                 self.set_state("neutral")
 
+        def reset(self):
+            self.reset_time = 0
+            self.set_state("neutral")
+
     class CuttingBoard():
         def __init__(self):
             self.cutting_board_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Chopping-block.png',ui_scale,257,192,0,0)
@@ -313,7 +289,8 @@ init python:
                 case 3:
                     self.active_icon_img.position = Vector(width * 3 / 4, y_offset + (height / 2))
 
-        def render(self, render, st, at):
+        def render(self, render, st, at,active_ingredient):
+            self.place_icon_image(active_ingredient)
             self.cutting_board_img.render(render,st,at)
             for ingredient_img in self.ingredient_images:
                 ingredient_img.render(render,st,at)
@@ -360,6 +337,12 @@ init python:
             for img in self.ingredient_progress_images:
                 img.render(render,st,at)
 
+        def reset(self):
+            self.ingredient_progress_images = []
+            self.display_ingredient_progress()
+            self.ingredient_silhouettes = []
+            self.display_ingredient_silhouettes()    
+
     class LevelIngredient():
         def __init__(self, name, beats_req, image_path, image_width):
             self.name = name
@@ -381,18 +364,27 @@ init python:
             else:
                 self.cur_ingredient_index = 0
 
-            cutting_board.place_icon_image(self.cur_ingredient_index)
+        def check_for_victory(self):
+            victory = True
+
+            for ingredient in self.ingredients:
+                if ingredient.progress < ingredient.beats_req:
+                    victory = False
+
+            return victory
 
         def get_active_ingredient(self):
             return self.ingredients[self.cur_ingredient_index]
 
         def reset(self):
             self.cur_ingredient_index = 0
+            self.max_ingredient_index = len(self.ingredients)
 
     class Handler(renpy.Displayable):
         def __init__(self, player):
             renpy.Displayable.__init__(self)
             self.level = "level 1"
+            # self.cur_level = instantiate_level("level 1")
             self.window_size = Vector(1920, 960)
             self.keyboard_held = {"chop": False, "swap": False}
             self.first_render = True
@@ -400,43 +392,37 @@ init python:
             # self.song = "/audio/neonsigns.wav"
             self.stage_complete = False
             self.first_try = True
-            self.time = 0
+            # self.cutting_board = CuttingBoard(self.cur_level.ingredients)
 
         def render(self, width, height, st, at):
-            time.update()
             display = renpy.Render(display_width, display_height)
-            # for img in game_images:
-            #     img.render(display, st, at)
-            
-            chop_rhythm_box.update(self.keyboard)
-            chop_rhythm_box.render(display,st,at)
-            
+
             hit_or_miss_indicator.update()
             hit_or_miss_indicator.render(display,st,at)
 
-            cutting_board.render(display,st,at)
+            cutting_board.render(display,st,at,cur_level.get_active_ingredient())
             
             sandwich_display.render(display,st,at)
-            
-            player.render(display, st, at)
-            
+                        
             self.update()
+
+            chop_rhythm_box.update()
+            chop_rhythm_box.render(display,st,at)
+            player.render(display, st, at)
+
             renpy.redraw(self, 0)
             self.first_render = False
             return display
 
-        def update(self):
-            if player.died:
-                player.reset()
-                self.game_over = True
-                renpy.timeout(0)
-            else:
-                for beat_time in cur_level.timing:
-                    if self.time == beat_time:
-                        chop_rhythm_box.add_beat()
-                self.time += 1
+        def update(self):    
+            for beat_time in cur_level.timing:
+                if time.time == beat_time:
+                    chop_rhythm_box.add_beat()
             if self.first_try == True:
                 self.first_try = False
+
+            time.update()
+            print(time.time)
 
         def event(self, ev, x, y, st):
             # calling functions that trigger on key press here seems to be the best way to guarantee they only get called once
@@ -450,87 +436,52 @@ init python:
                 if ev.key == pygame.K_d:
                     if self.keyboard_held["swap"] == False:
                         self.keyboard_held["swap"] = True
-                        cur_level.swap_ingredient()
+                        self.cur_level.swap_ingredient()
             if ev.type == pygame.KEYUP:
                 if ev.key == pygame.K_a:
                     self.keyboard_held["chop"] = False
                 if ev.key == pygame.K_d:
                     self.keyboard_held["swap"] = False
-            # if ev.type == pygame.KEYDOWN:
-            #     if ev.key == pygame.K_LEFT:
-            #         self.keyboard["left"] = True
-            #     elif ev.key == pygame.K_RIGHT:
-            #         self.keyboard["right"] = True
-            #     elif ev.key == pygame.K_SPACE:
-            #         self.keyboard["space"] = True
-            #     elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
-            #         self.keyboard["shift"] = True
-            #     elif ev.key == pygame.K_RETURN:
-            #         self.keyboard["enter"] = True
-            # elif ev.type == pygame.KEYUP:
-            #     if ev.key == pygame.K_LEFT:
-            #         self.keyboard["left"] = False
-            #     elif ev.key == pygame.K_RIGHT:
-            #         self.keyboard["right"] = False
-            #     elif ev.key == pygame.K_SPACE:
-            #         self.keyboard["space"] = False
-            #     elif ev.key == pygame.K_LSHIFT or ev.key == pygame.K_RSHIFT:
-            #         self.keyboard["shift"] = False
-            #     elif ev.key == pygame.K_RETURN:
-            #         self.keyboard["enter"] = False
-            # else:
-            #     if renpy.map_event(ev, "pad_a_press"):
-            #         self.keyboard["space"] = True
-            #     elif renpy.map_event(ev, "pad_a_release"):
-            #         self.keyboard["space"] = False
-
-            #     if renpy.map_event(ev, "pad_b_press"):
-            #         self.keyboard["enter"] = True
-            #     elif renpy.map_event(ev, "pad_b_release"):
-            #         self.keyboard["enter"] = False
-
-            #     if renpy.map_event(ev, "pad_leftx_neg") or renpy.map_event(ev, "pad_rightx_neg") or renpy.map_event(ev, "pad_dpleft_press"):
-            #         self.keyboard["left"] = True
-            #     elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["left"]) or renpy.map_event(ev, "pad_dpleft_release"):
-            #         self.keyboard["left"] = False
-
-            #     if renpy.map_event(ev, "pad_leftx_pos") or renpy.map_event(ev, "pad_rightx_pos") or renpy.map_event(ev, "pad_dpright_press"):
-            #         self.keyboard["right"] = True
-            #     elif ((renpy.map_event(ev, "pad_leftx_zero") or renpy.map_event(ev, "pad_rightx_zero")) and self.keyboard["right"]) or renpy.map_event(ev, "pad_dpright_release"):
-            #         self.keyboard["right"] = False
 
             # Ensure the screen updates
             renpy.restart_interaction()
 
-            # If the player loses, return it
-            #if self.player.died:
-            #    return self.player.died
-            #else:
             raise renpy.IgnoreEvent()
+
+        def instantiate_level(self,level):
+            # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
+            # a full bar is ~480 units of time?
+            match(level):
+                case "level 1":
+                    ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
+                    timing = [0,30,60,90,120,180,450,480]
+            return Level(ingredients_list, timing)
+
 
         def next_stage(self):
             if self.level == "level 1":
                 self.level = "level 2"
-            self.stage_complete = True
 
         def reset(self):
-            self.keyboard = {"up": False, "down": False, "left": False, "right": False, "space": False, "shift": False, "enter": False}
+            self.keyboard_held = {"chop": False, "swap": False}
+            self.stage_complete = False
             self.game_over = False
-            self.time = 0
-            player.reset()
-            cur_level.reset()
+            time.reset()
+
+            # print(self.cur_level)
+            # self.cur_level = instantiate_level("level 1")
+            # print(self.cur_level)
+            
             chop_rhythm_box.reset()
-            # renpy.music.play(self.song, loop = True)
+            # hit_or_miss_indicator.reset()
+            sandwich_display.reset()
             pass
 
     time = Time()
 
-    # overlay_box_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Overlay-box.png',5,257,192,3*display_width/4,0)
-    # bread_img = GameImage('/images/minigame imgs/Plant-bf-minigame-Bread.png',5,257,192,3*display_width/4,0)
-    # game_images = [overlay_box_img,bread_img]
-
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
+
     ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
     level1 = Level(ingredients_list,[0,30,60,90,120,180,450,480])
     cur_level = level1
@@ -541,29 +492,27 @@ init python:
     sandwich_display = SandwichDisplay()
     chop_rhythm_box = ChopRhythmBox()
 
-
 default handler = Handler(player)
 
 screen minigame(level):
     if handler.game_over == True: #game over screen
-        $ handler.game_over = False
-        # $ player.position = persistent.player_start
+        $ handler.reset()
         frame:
             yminimum 1080
             background "#cc3300"
-            add '/images/minigame imgs/Plant-bf-minigame-Background.png' yalign 0.5
-            textbutton "continue ... ?":
+            add '/minigame imgs/bad_sandwich_gameover.jpg' yalign 0.5
+            textbutton "This sandwich sucks ass, try again? (Click here)":
                 yoffset 920
+                xalign 0.5
                 action Return()
     elif handler.stage_complete == True: #level success screen
-        $ handler.game_over = False
-        # $ player.position = persistent.player_start
-        $ player.fallcount = 0
+        $ handler.reset()
+        $ handler.next_stage()
         frame:
             yminimum 1080
             background "#66cc66"
-            add '/images/minigame imgs/Plant-bf-minigame-Background.png' yalign 0.5
-            textbutton "keep going! almost there!":
+            add '/minigame imgs/victory_sandwich.png' yalign 0.5
+            textbutton "Tasty!! (Click here to continue)":
                 yoffset 920
                 xalign 0.5
                 action Call("leveldone")

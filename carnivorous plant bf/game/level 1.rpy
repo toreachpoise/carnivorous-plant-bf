@@ -12,7 +12,6 @@ menu:
         pass
 p "alright, let's do this"
 python:
-    player.reset()
     handler.game_over = False
     handler.reset()
     player.died = False

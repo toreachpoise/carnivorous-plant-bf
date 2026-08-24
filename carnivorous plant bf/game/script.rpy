@@ -62,7 +62,7 @@ image plant store exterior 2 = "/bgs/_0021_plant-store-exterior-2.png"
 
 # minigame images
 
-
+image gameover ="/minigame imgs/bad_sandwich_gameover.jpg"
 
 
 
