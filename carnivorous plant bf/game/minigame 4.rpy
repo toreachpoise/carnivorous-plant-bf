@@ -140,6 +140,7 @@ init python:
             else:
                 if cur_level.check_for_victory():
                     handler.stage_complete = True
+                    handler.next_stage()
                 else:
                     handler.game_over = True
 
@@ -181,7 +182,7 @@ init python:
             self.image = GameImage("/images/minigame imgs/Plant-bf-minigame-Beat.png",ui_scale,2,15,position.x,position.y)
             self.beat_end = 5*ui_scale
             self.beat_hit_h_loc = 30*ui_scale
-            self.player_attempted_hit = False # this flag is set but not used
+            # self.player_attempted_hit = False # this flag is set but not used
             self.miss = False
             self.past_end = False
             self.past_hit_loc = False
@@ -199,10 +200,8 @@ init python:
             #     self.player_attempted_hit = True
             if self.position.x <= self.beat_hit_h_loc + self.margin and self.position.x >= self.beat_hit_h_loc - self.margin:
                 self.miss = False
-                # hit_or_miss_indicator.set_state("hit") #now set in Player.chop()
             else:
                 self.miss = True
-                # hit_or_miss_indicator.set_state("miss")
 
             return not self.miss
 
@@ -448,18 +447,21 @@ init python:
             raise renpy.IgnoreEvent()
 
         def instantiate_level(self,level):
-            # print(self.stage_complete)
+            # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
+            # a full bar is ~480 units of time?
 
             print(level)
             if level == "level 1":
                 return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
-            
+            elif level == "level 2":
+                # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)],[1,2,3,4,5])
+                return Level([LevelIngredient("chicken",1,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 1,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,50,100,150,200,250])
             return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
             
 
         def next_stage(self):
             if self.level == "level 1":
-                self.level = "peepee"
+                self.level = "level 2"
 
         def reset(self):
             print(self.stage_complete)

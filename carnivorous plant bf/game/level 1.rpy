@@ -26,4 +26,4 @@ menu:
 label leveldone:
 $ handler.stage_complete = False
 if handler.level == "level 2":
-    jump chapter1
+    jump minigame
