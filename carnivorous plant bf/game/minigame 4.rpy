@@ -259,6 +259,7 @@ init python:
             ing_count = 0
 
             for ingredient in cur_level.ingredients:
+                print(ingredient.image_path)
                 match ing_count:
                     case 0:
                         self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset,y_offset))
@@ -294,6 +295,13 @@ init python:
                 ingredient_img.render(render,st,at)
             self.place_icon_image(active_ingredient)
             self.active_icon_img.render(render,st,at)
+
+        def reset(self):
+            self.ingredients = cur_level.ingredients
+            self.ingredient_images = []
+            self.init_ingredient_images()
+            self.place_icon_image(0)
+
 
     class SandwichDisplay():
         def __init__(self):
@@ -452,11 +460,10 @@ init python:
 
             print(level)
             if level == "level 1":
-                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
+                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,30,60,90,130,160,190])
             elif level == "level 2":
-                # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)],[1,2,3,4,5])
-                return Level([LevelIngredient("chicken",1,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 1,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,50,100,150,200,250])
-            return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
+                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,25,50,80,105,130,160,185,210])
+            # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
             
 
         def next_stage(self):
@@ -478,17 +485,15 @@ init python:
             
             chop_rhythm_box.reset()
             sandwich_display.reset()
+            cutting_board.reset()
             pass
 
     time = Time()
 
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
-
-    ingredients_list = [LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)]
-    timing = [0,30,60,90,120,180]
-    print(timing)
-    cur_level = Level(ingredients_list, timing)
+    # this is now set in handler.instantiate level, but since the other stuff is globally called here I'm gonna also set it here since deadline is in >7 days
+    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,30,60,90,130,160,190])
 
     player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
