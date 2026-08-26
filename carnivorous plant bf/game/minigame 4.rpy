@@ -462,7 +462,7 @@ init python:
             if level == "level 1":
                 return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,30,60,90,130,160,190])
             elif level == "level 2":
-                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,25,50,80,105,130,160,185,210])
+                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,25,50,75,100,125,185,210,235,300,325])
             # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
             
 
