@@ -262,13 +262,13 @@ init python:
                 print(ingredient.image_path)
                 match ing_count:
                     case 0:
-                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset,y_offset))
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ingredient.scale,250,250,x_offset,y_offset))
                     case 1:
-                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset + (width / 2),y_offset))
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ingredient.scale,250,250,x_offset + (width / 2),y_offset))
                     case 2:
-                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset,y_offset + (height / 2)))
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ingredient.scale,250,250,x_offset,y_offset + (height / 2)))
                     case 3:
-                        self.ingredient_images.append(GameImage(ingredient.image_path,ui_scale,250,250,x_offset + (width / 2),y_offset + (height / 2)))
+                        self.ingredient_images.append(GameImage(ingredient.image_path,ingredient.scale,250,250,x_offset + (width / 2),y_offset + (height / 2)))
 
                 ing_count += 1
 
@@ -317,7 +317,7 @@ init python:
             index = 0
 
             for ingredient in cur_level.ingredients:
-                cur_img = GameImage(ingredient.image_path,ui_scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
+                cur_img = GameImage(ingredient.image_path,ingredient.scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
                 cur_img.change_brightness(-0.75)
                 self.ingredient_silhouettes.append(cur_img)
                 index += 1
@@ -328,9 +328,9 @@ init python:
             index = 0
 
             for ingredient in cur_level.ingredients:
-                cur_img = GameImage(ingredient.image_path,ui_scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
+                cur_img = GameImage(ingredient.image_path,ingredient.scale,0,0,self.overlay_x_pos + (5.5*ui_scale),index * 100 + 48 * ui_scale)
                 # crop the image so that it's a fraction of its width equal to how much of it has been chopped so far
-                cur_img.crop(0,0,int(ingredient.image_width * (ingredient.progress / ingredient.beats_req)),300)
+                cur_img.crop(0,0,int(ingredient.image_width * ingredient.scale * (ingredient.progress / ingredient.beats_req)),300)
                 self.ingredient_progress_images.append(cur_img)
                 index += 1
 
@@ -351,12 +351,13 @@ init python:
             self.display_ingredient_silhouettes()    
 
     class LevelIngredient():
-        def __init__(self, name, beats_req, image_path, image_width):
+        def __init__(self, name, beats_req, image_path, image_width, scale):
             self.name = name
             self.progress = 0
             self.beats_req = beats_req
             self.image_path = image_path
             self.image_width = image_width
+            self.scale = scale
 
     class Level():
         def __init__(self, ingredients, timing):
@@ -458,11 +459,12 @@ init python:
             # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
             # a full bar is ~480 units of time?
 
+            # each ingredient gets a custom scaling to handle their sizes not being consistent, the formula for this scaler is (<chicken wing width> * ui_scale) / x = scaler, where x is the length in pixels of the asset to be scaled.
             print(level)
             if level == "level 1":
-                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,30,60,90,130,160,190])
+                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,130,160,190])
             elif level == "level 2":
-                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,25,50,75,100,125,185,210,235,300,325])
+                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,25,50,75,100,125,185,210,235,300,325])
             # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
             
 
@@ -493,7 +495,7 @@ init python:
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
     # this is now set in handler.instantiate level, but since the other stuff is globally called here I'm gonna also set it here since deadline is in >7 days
-    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 55*ui_scale),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 55*ui_scale)], [0,30,60,90,130,160,190])
+    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,130,160,190])
 
     player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
