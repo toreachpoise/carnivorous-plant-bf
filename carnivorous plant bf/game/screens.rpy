@@ -367,16 +367,16 @@ screen main_menu():
     
     #use navigation ## in this case we're getting rid of the navigation formatting
 
-    imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 410  
+    imagebutton auto "gui/button/main_menu_%s.png" action Start() xpos 440 ypos 410  
     textbutton _("START") action Start() xpos 620 ypos 425
     
-    imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 510  
+    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("load") xpos 440 ypos 510  
     textbutton _("LOAD") action ShowMenu("load") xpos 625 ypos 525
 
-    imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 410
+    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("preferences") xpos 1000 ypos 410
     textbutton _("PREFERENCES") action ShowMenu("preferences") xpos 1120 ypos 425
 
-    imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 510
+    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("about") xpos 1000 ypos 510
     textbutton _("ABOUT") action ShowMenu("about") xpos 1180 ypos 525
 
     if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
