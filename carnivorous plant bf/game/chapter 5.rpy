@@ -1,9 +1,9 @@
 label chapter5:
 
 scene apartment entrance with fade
+scene apartment entrance overgrown with dissolve
 "You come up on your apartment building, its exterior now overgrown with grasping vines and reaching roots."
 "The snaking greenery seems to be centered on the window of your basement apartment."
-scene outside light
 "As you approach the door, a root coils around your leg like a constrictor, stopping you."
 "It bites into your leg, too tight at first before loosening."
 "Your [boyfriend]'s voice is far more resonant than before, emanating from deep inside your apartment."
@@ -26,17 +26,19 @@ b "Please!! I need it! I Need It! I NEED IT NOW!"
 "You throw yourself against the door. Your shoulder twinges with pain but otherwise you achieve nothing."
 "You go again, and again as the dog's panicked yelps grow louder."
 "Finally, you crash through the door, tearing against the vines and roots and exposing the verdant tangle that has overtaken your apartment."
-scene living room dark
+scene living room overgrown
+with pushright
 if boyfriend == "flytrap":
-    show flytrap with dissolve
+    show flytrap at midright with dissolve
 if boyfriend == "spider":
-    show spider with dissolve
+    show spider at midright with dissolve
 if boyfriend == "foxglove":
-    show foxglove with dissolve
+    show foxglove at midright with dissolve
 if boyfriend == "thistle":
-    show thistle with dissolve
+    show thistle at midright with dissolve
 if boyfriend == "orb":
-    show orb with dissolve
+    show orb at midright with dissolve
+show captured dog at left
 "In the center of the thicket, struggling against a knot of plant material, is your neighbor's dog. Extending over it is your plant, poised to kill."
 "He pretends to notice you casually."
 b "Heyyyyyyyyy ...."
@@ -75,18 +77,31 @@ menu:
         if boyfriend == "orb":
             "Brilliant light overwhelms everything you can see."
             "You feel your mind fade, as memories of anything but this moment are pulled out of your conscious mind."
-        $ player_bled_ch5 = True
+        $ ch5cut = True
         b "THANK YOU, oh my god thank you."
         b "You're still gonna make breakfast though, right?"
         p "Are you fucking kidding me?"
         ARE "HARDER MINIGAME"
 
+label chapter5minigamedone:
 "The [boyfriend] inhales the first few bites of your breakfast."
 "It's clearly a great act of will when it slows down to properly enjoy the rest of it, to savor your work."
 "As each bite is absorbed to his satisfaction, the vines around the little puppy loosen, and he's left shaking but free."
 "The vines around the room retreat as well, allowing you to pick up the dog."
 "You offer them some reassuring pets, though they honestly seem frightened of you at this point."
+scene outside dark with wipeleft
 "You take the dog outside and return them to the pen your upstairs housemate has for them in your shared yard."
+scene living room overgrown with wiperight
+if boyfriend == "flytrap":
+    show flytrap with dissolve
+if boyfriend == "spider":
+    show spider with dissolve
+if boyfriend == "foxglove":
+    show foxglove with dissolve
+if boyfriend == "thistle":
+    show thistle with dissolve
+if boyfriend == "orb":
+    show orb with dissolve
 "You step back inside. Your apartment is in disarray. The vines have eaten through your furniture and walls alike."
 "In the center of it is your [boyfriend]."
 if boyfriend == "flytrap":
@@ -104,7 +119,7 @@ b "I don't know what it's worth, but I'm sorry."
 b "I get so hungry ... That's not an excuse but. It is my nature."
 b "I get hungry, and I grow, and when I get big enough I can do impossible things."
 b "I'd like to show you one of those impossible things, if you'd like. Would that be okay?"
-if player_bled_ch5: 
+if ch5cut: 
     $ skeptical_comment = True
 if optimism < 5:
     $ skeptical_comment = True
@@ -124,7 +139,17 @@ scene black
 "You can see him now. Smiling at you, [boyfriend_description]. The sunlight gleaming off him."
 "He's pulling fresh baby tomatoes from the plants you grew together to make you an omelette."
 "You are warm, you are safe, and you are loved."
-scene living room dark with fade
+scene living room overgrown with fade
+if boyfriend == "flytrap":
+    show flytrap with dissolve
+if boyfriend == "spider":
+    show spider with dissolve
+if boyfriend == "foxglove":
+    show foxglove with dissolve
+if boyfriend == "thistle":
+    show thistle with dissolve
+if boyfriend == "orb":
+    show orb with dissolve
 "You blink and the vine has pulled away from your eyes, leaving you back in your destroyed apartment."
 b "That ... took a lot out of me, just to show you."
 b "I'm not strong enough to make a world yet, but I'm close. I only need a bit more."

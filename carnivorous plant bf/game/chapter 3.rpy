@@ -55,7 +55,7 @@ menu:
         jump plantsetup
 
 label plantsetup: 
-if ((soil == False) or (light == False) or (water == False)):
+if ((location == "none") or (light == False) or (water == False)):
     p "So the basic things a plant needs are ...{nw}"
     menu:
         p "So the basic things a plant needs are ...{fast}"
@@ -197,66 +197,65 @@ menu:
 
 label chapter3minigamedone:
 scene kitchen light with dissolve
-menu:
-    "(got cut while preparing sandwich)":
-        "You drive the knife down, expecting to cut meat, but it knicks your own flesh instead."
-        "Your face scrunches as you feel the shock of pain, and the knife slips from your hand."
-        "You don't hear it fall."
-        "Instead, you hear a rustling of leaves, and a cool wet sensation over your thumb."
-        if boyfriend == "flytrap":
-            show flytrap
-        if boyfriend == "spider":
-            show spider
-        if boyfriend == "foxglove":
-            show foxglove
-        if boyfriend == "thistle":
-            show thistle
-        if boyfriend == "orb":
-            show orb
-        "As you open your eyes, you see {i}him{/i} suckling at your wound like it's sweet ambrosia."
-        if boyfriend == "flytrap":
-            "Despite the sharpness of its teeth, it scoops the liquid into one of its jaws gently."
-        if boyfriend == "spider":
-            "Its leaves funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
-        if boyfriend == "foxglove":
-            "The lips are as plush and tender as you imagined."
-            "You can't help but imagine how they would feel on other parts of your body."
-        if boyfriend == "thistle":
-            "Its thorns funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
-        if boyfriend == "orb":
-            "The drops are drawn magically from your fingers into the air."
-            "They swirl about the orb and then become absorbed into it."
-        jump alittlemore
-    "(didn't get cut)":
-        "Your finished sandwich is nothing special, but it was made with care."
-        "You approach the plant with it feeling ..."
-        extend " nervous? Ridiculous? Both?"
-        if boyfriend == "flytrap":
-            show flytrap with dissolve
-        if boyfriend == "spider":
-            show spider with dissolve
-        if boyfriend == "foxglove":
-            show foxglove with dissolve
-        if boyfriend == "thistle":
-            show thistle with dissolve
-        if boyfriend == "orb":
-            show orb with dissolve
-        "You try to offer the sandwich to the [boyfriend] on your open palm."
-        "..."
-        "There's no motion, and now you are certain you just feel ridiculous."
-        "You sigh."
-        "You sigh {fast}and then it snaps."
-        if boyfriend == "spider":
-            "Its sharp leaves claw into you.{nw}"
-        if boyfriend == "thistle":
-            "Its flowerhead thuds into you.{nw}"
-        if boyfriend == "orb":
-            "A ray of white-hot light shoots out from the orb.{nw}"
-        else:
-            "Teeth on your fingers. Sharp teeth. Wooden teeth.{nw}"
-        extend "Tearing into your offering and your hand like they're one and the same."
-        $ fed_plant += 5
-        jump alittlemore
+if ch3cut:
+    "You drive the knife down, expecting to cut meat, but it knicks your own flesh instead."
+    "Your face scrunches as you feel the shock of pain, and the knife slips from your hand."
+    "You don't hear it fall."
+    "Instead, you hear a rustling of leaves, and a cool wet sensation over your thumb."
+    if boyfriend == "flytrap":
+        show flytrap
+    if boyfriend == "spider":
+        show spider
+    if boyfriend == "foxglove":
+        show foxglove
+    if boyfriend == "thistle":
+        show thistle
+    if boyfriend == "orb":
+        show orb
+    "As you open your eyes, you see {i}him{/i} suckling at your wound like it's sweet ambrosia."
+    if boyfriend == "flytrap":
+        "Despite the sharpness of its teeth, it scoops the liquid into one of its jaws gently."
+    if boyfriend == "spider":
+        "Its leaves funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
+    if boyfriend == "foxglove":
+        "The lips are as plush and tender as you imagined."
+        "You can't help but imagine how they would feel on other parts of your body."
+    if boyfriend == "thistle":
+        "Its thorns funnel the blood into its eye, which blinks up the blood. Like crying in reverse."
+    if boyfriend == "orb":
+        "The drops are drawn magically from your fingers into the air."
+        "They swirl about the orb and then become absorbed into it."
+    jump alittlemore
+else:
+    "Your finished sandwich is nothing special, but it was made with care."
+    "You approach the plant with it feeling ..."
+    extend " nervous? Ridiculous? Both?"
+    if boyfriend == "flytrap":
+        show flytrap with dissolve
+    if boyfriend == "spider":
+        show spider with dissolve
+    if boyfriend == "foxglove":
+        show foxglove with dissolve
+    if boyfriend == "thistle":
+        show thistle with dissolve
+    if boyfriend == "orb":
+        show orb with dissolve
+    "You try to offer the sandwich to the [boyfriend] on your open palm."
+    "..."
+    "There's no motion, and now you are certain you just feel ridiculous."
+    "You sigh."
+    "You sigh {fast}and then it snaps."
+    if boyfriend == "spider":
+        "Its sharp leaves claw into you.{nw}"
+    if boyfriend == "thistle":
+        "Its flowerhead thuds into you.{nw}"
+    if boyfriend == "orb":
+        "A ray of white-hot light shoots out from the orb.{nw}"
+    else:
+        "Teeth on your fingers. Sharp teeth. Wooden teeth.{nw}"
+    extend " Tearing into your offering and your hand like they're one and the same."
+    $ fed_plant += 5
+    jump alittlemore
 
 
 label alittlemore:
@@ -268,7 +267,7 @@ menu:
         "After a little resistance he releases you, and shifts back sheepishly."
         jump ch3end
     "Indulge him":
-        if (boyfriend == "spider") or (boyfriend == "flytrap") or (boyfriend == "thistle"):
+        if ((boyfriend == "spider") or (boyfriend == "flytrap") or (boyfriend == "thistle")):
             "Your eyes meet his, and you give the slightest nod."
         else:
             "Your eyes meet what answer for his, and you give the slightest nod."
@@ -293,8 +292,12 @@ if boyfriend == "foxglove":
     "He inhales with such force with each mouth that the sandwich is shredded through each set of lips."
     "You see the fragments travel down each of its tubular throats for a moment before it vanishes."
 if boyfriend == "thistle":
+    show thistle with vpunch
+    show thistle with vpunch
+    show thistle with vpunch
     "He smashes and smashes and smashes it into bits and blinks the crumbs into his great eye."
 if boyfriend == "orb":
+    show orb with vpunch
     "The orb emits a brilliant flash."
     "As your eyes adjust afterwards, the sandwich is gone, eroded without a trace."
 $ fed_plant += 5

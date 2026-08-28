@@ -1,6 +1,6 @@
 label chapter6:
 if slept_together == True:
-    scene living room light
+    scene living room overgrown
 else:
     scene bedroom
 "In the morning you discover two things."
@@ -19,17 +19,17 @@ if slept_together == True:
     "You now have your arms wrapped around your [boyfriend], your face buried against the soft coolness of his stem."
 else:
     "You now have your arms wrapped around your pillow. Your back hurts from sleeping like this, without proper support."
-    scene living room light t8n
-    if boyfriend == "flytrap":
-        show flytrap with dissolve
-    if boyfriend == "spider":
-        show spider with dissolve
-    if boyfriend == "foxglove":
-        show foxglove with dissolve
-    if boyfriend == "thistle":
-        show thistle with dissolve
-    if boyfriend == "orb":
-        show orb with dissolve
+scene kitchen overgrown with dissolve
+if boyfriend == "flytrap":
+    show flytrap with dissolve
+if boyfriend == "spider":
+    show spider with dissolve
+if boyfriend == "foxglove":
+    show foxglove with dissolve
+if boyfriend == "thistle":
+    show thistle with dissolve
+if boyfriend == "orb":
+    show orb with dissolve
 "The second is that your plant has continued to grow."
 "Every inch of the apartment is now coated in a tangled mass of roots and vines."
 "Even the windows are covered, so that the light in the room enters with a soft green tinge."
@@ -59,10 +59,10 @@ b "That's how this kind of magic works. We eat and we grow, and when we're big e
 p "Wha--"
 b "--we eat{fast} just the version of you that exists in this world,{nw}"
 if optimism < 0:
-    extend "the world you hate. Where you're depressed, alone, anxious.{nw}"
+    extend "the world you hate. Where you're depressed, alone, anxious."
 else:
-    extend "the world you were born into. Where you've lived up to this point.{nw}"
-b "And with your energy, your life force, and your wish, we stitch a new world into being. One that gives you what you deserve. [deepest_desire] with [boyfriend_description]."
+    extend "the world you were born into. Where you've lived up to this point."
+b "And with your energy, your life force, and your wish, we stitch a new world into being. One that gives you what you deserve. [deepest_desire] with the love of your life: [boyfriend_description]."
 p "..."
 b "I know. I know that it's a lot. I know you might not trust me. So if you don't want me to make your wish, you don't have to. It's up to you."
 p "Why didn't you tell me this sooner? Why now?"
@@ -87,12 +87,12 @@ menu:
             p "There were definitely warning signs ..."
         p "It's been really cool to watch you grow, and honestly I needed the company."
         "You see your [boyfriend]'s anxiety soothe, just a little."
-        if (boyfriend == "flytrap") OR (boyfriend == "spider") OR (boyfriend == "thistle"):
-            "Your gazes finally meet."
         if boyfriend == "foxglove":
             "His flowers perk up, some of the lips quirk with little smiles."
-        if boyfriend == "orb":
+        elif boyfriend == "orb":
             "The orb shines brighter again."
+        else:
+            "Your gazes finally meet."
     "Is there anything else you aren't telling me?" if skeptical_comment:
         $ optimism -= 2
         $ brains += 2

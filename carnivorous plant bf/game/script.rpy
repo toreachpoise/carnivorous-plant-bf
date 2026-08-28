@@ -21,7 +21,9 @@ default blood_question = False
 default expenses_question = False
 default love_question = False
 default dog_question = False
-default player_bled_ch5 = False
+default ch3cut = False
+default ch5cut = False
+default skeptical_comment = False
 
 # DRAMATIS PERSONAE
 # The color argument colorizes the name of the character.
@@ -36,16 +38,19 @@ define d = Character("dogtective")
 # bgs
 image living room light = "/bgs/_0001_living-room-light.png"
 image living room dark = "/bgs/_0002_living-room-dark.png"
+image living room overgrown = "/bgs/living room overgrown.png"
 image kitchen dark = "/bgs/_0003_kitchen-dark.png"
 image kitchen light = "/bgs/_0004_kitchen-light.png"
+image kitchen overgrown = "/bgs/kitchen overgrown.png"
 image table light = "/bgs/_0005_table-light.png"
-image table light 2 = "/bgs/_0006_table-light-2.png"
+image table dark = "/bgs/_0006_table-dark.png"
 image bedroom = "/bgs/_0007_bedroom.png"
 image aquarium = "/bgs/_0008_aquarium.png"
 image convenience entrance = "/bgs/_0009_convenience-entrance.png"
 image shopping arcade = "/bgs/_0010_shopping-arcade.png"
 image alley = "/bgs/_0011_alley.png"
 image apartment entrance = "/bgs/_0012_apartment-entrance.png"
+image apartment entrance overgrown = "/bgs/apartment entrance overgrown.png"
 image outside dark = "/bgs/_0013_outside-dark.png"
 image outside light = "/bgs/_0014_outside-light.png"
 image underpass = "/bgs/_0015_underpass.png"
@@ -56,9 +61,17 @@ image greenhouse 4 = "/bgs/_0019_greenhouse-4.png"
 image plant store exterior 1 = "/bgs/_0020_plant-store-exterior-1.png"
 image plant store exterior 2 = "/bgs/_0021_plant-store-exterior-2.png"
 
+# custom sprite positions
+transform midleft:
+    xalign 0.33 yalign 0.5
+transform midright:
+    xalign 0.66 yalign 0.5
+transform lower:
+    xalign 0.5 yalign 0.75
+
 
 # character sprites
-
+image dogtective = "dogtective.png"
 
 # minigame images
 

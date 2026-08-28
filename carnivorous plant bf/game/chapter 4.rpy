@@ -74,8 +74,9 @@ label chapter4:
     "You're trying to think of a clever way to describe this to your [boyfriend] when you get home."
     scene alley with wipeleft
     "Some way of framing the irony of buying another, somehow equally disposable but thicker plastic bag to care for your plant."
+    show dogtective with easeinright
+    show dogtective with hpunch
     "As you're lost in this thought, a large and dangerous looking lady steps into your path."
-    show dogtective with move
     d "I'm Dogtective Sasq'ets. I'm a PI. I need to talk to you."
     p "Don't you need a warrant? Or like, probable cause or something?"
     d "That's a cop, dumbass. I'm a PI. That means Private Investigator."
@@ -179,8 +180,10 @@ label doginterview:
             d "I don't know what that means."
             d "But I do know that a worrying number of the cases involved people being obsessed about their romantic entanglements."
             d "Tell me, [player_name], are you lonely? Are you looking for love?"
+            show dogtective at lower
             menu:
                 "I am alone ...":
+                    show dogtective at center
                     $ optimism -= 2
                     p "I live alone. I ride the train alone even though I'm surrounded by people to my box where I work alone."
                     p "I come home alone and I eat alone then I watch TV alone, until I sleep. Alone."
@@ -188,6 +191,7 @@ label doginterview:
                     d "Hmm ... I mean when you put it like that it sounds sad but, isn't that life?"
                     d "Most people are alone most of the time nowadays. I think that's okay."
                 "I'm okay":
+                    show dogtective at center
                     $ optimism += 2
                     p "I like my neighbors and my coworkers well enough. Especially Ms Espera next door. She brings me food sometimes."
                     p "I try to spend as much time as I can with my friends too, online and in person. We play games. We go swimming in the lake in the summer when we can."

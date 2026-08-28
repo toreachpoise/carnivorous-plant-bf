@@ -136,6 +136,7 @@ menu:
                 hide thistle
                 jump chooseboyfriend
     "orb":
+        show orb
         "Your gaze is drawn to this plant's light even as its brilliance hurts your eyes."
         if optimism > 5:
             "It fills you with a sense of deep joy and contentment."
