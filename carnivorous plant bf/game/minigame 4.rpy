@@ -259,7 +259,6 @@ init python:
             ing_count = 0
 
             for ingredient in cur_level.ingredients:
-                print(ingredient.image_path)
                 match ing_count:
                     case 0:
                         self.ingredient_images.append(GameImage(ingredient.image_path,ingredient.scale,250,250,x_offset,y_offset))
@@ -460,23 +459,16 @@ init python:
             # a full bar is ~480 units of time?
 
             # each ingredient gets a custom scaling to handle their sizes not being consistent, the formula for this scaler is (<chicken wing width> * ui_scale) / x = scaler, where x is the length in pixels of the asset to be scaled.
-            print(level)
             if level == "level 1":
-                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,130,160,190])
+                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,110,140,190,220,250])
             elif level == "level 2":
-                return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 3,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 3,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,25,50,75,100,125,185,210,235,300,325])
-            # return Level([LevelIngredient("chicken",2,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale),LevelIngredient("chicken", 3,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55*ui_scale)], [0,30,60,90,120,180])
-            
+                return Level([LevelIngredient("chicken",4,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 1,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,140,190,220,270,300,330,360])
 
         def next_stage(self):
             if self.level == "level 1":
                 self.level = "level 2"
 
         def reset(self):
-            print(self.stage_complete)
-            print(self.game_over)
-            print(cur_level.timing)
-
             self.keyboard_held = {"chop": False, "swap": False}
             self.stage_complete = False
             self.game_over = False
@@ -495,7 +487,7 @@ init python:
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
     # this is now set in handler.instantiate level, but since the other stuff is globally called here I'm gonna also set it here since deadline is in >7 days
-    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,130,160,190])
+    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,110,140,190,220,250])
 
     player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
@@ -518,8 +510,7 @@ screen minigame(level):
                 action Return()
     elif handler.stage_complete == True: #level success screen
         # For some GOD FORSAKEN FUCKING REASON this evaluates even when handler.stage_complete prints as false.
-        # I don't have time to figure out why, so instead we need to set handler.next_stage() to be written somewhere else
-        # TODO: that ^
+        # I don't have time to figure out why, so instead handler.next_stage() is set in ChopRhythmBox.update()
         # $ print(handler.stage_complete)
         # $ handler.next_stage()
         # $ handler.reset()

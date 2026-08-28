@@ -75,10 +75,14 @@ image dogtective = "dogtective.png"
 
 # minigame images
 
-image gameover ="/minigame imgs/bad_sandwich_gameover.jpg"
-
-
-
+image tutorial background = Image("#3f6c50", xfill=True, yfill=True)
+image tutorial beats = Image("/minigame imgs/tutorial/tutorial_beats.png", yalign=0)
+image tutorial chop = "/minigame imgs/tutorial/tutorial_chop.png"
+image tutorial progress = "/minigame imgs/tutorial/tutorial_progress_arrow.jpg"
+image tutorial one_ingredient_done = "/minigame imgs/tutorial/tutorial_one_done_arrow.jpg"
+image tutorial swap = "/minigame imgs/tutorial/tutorial_swap.png"
+image tutorial swap_progress = "/minigame imgs/tutorial/tutorial_swap_progress.png"
+image tutorial win = "/minigame imgs/tutorial/tutorial_win.png"
 
 # GAME STARTS HERE
 
