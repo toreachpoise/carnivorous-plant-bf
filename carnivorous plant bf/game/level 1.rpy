@@ -1,9 +1,24 @@
 label minigame:
 if handler.first_try == True:
     label controls_explanation:
-    p "I don't know why I feel compelled to say this but ..."
-    p "... to move me, use the arrow keys. To jump, press SPACEBAR. To knife bad guys, hit ENTER"
-    p "or if you're on a controller, use the D pad or joystick to move, A or X to jump, and B to attack. Or something, you'll figure it out."
+
+    scene black
+
+    show tutorial beats
+    p "This is the cooking screen, in the red bar blue beats will come from right to left."
+    show tutorial chop
+    p "Press A when a beat is in the green section to Chop!"
+    show tutorial progress
+    p "When you Chop! at the right time, you will fill up the selected ingredient on the right somewhat. The amount is unique to each ingredient."
+    show tutorial one_ingredient_done
+    p "Fill up the ingredient all the way to completely chop it."
+    show tutorial swap
+    p "Press D to Swap! your selected ingredient."
+    show tutorial swap_progress
+    p "Now when you Chop! it will fill up that ingredient on the right."
+    show tutorial win
+    p "Fully chop all ingredients to make a Tasty sandwich."
+    p "If you don't fully chop all ingredients before running out of beats your sandwich will Suck Ass."
 menu:
     "Do you need to hear about the controls again?"
     "yes":
