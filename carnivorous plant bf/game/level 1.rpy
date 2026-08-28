@@ -25,7 +25,7 @@ menu:
         jump controls_explanation
     "no":
         pass
-p "alright, let's do this"
+p "Let's get cooking!"
 # python:
 #     handler.game_over = False
 $ handler.reset()
