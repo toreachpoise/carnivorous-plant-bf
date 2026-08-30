@@ -81,7 +81,7 @@ menu:
         b "THANK YOU, oh my god thank you."
         b "You're still gonna make breakfast though, right?"
         p "Are you fucking kidding me?"
-        ARE "HARDER MINIGAME"
+        jump minigame
 
 label chapter5minigamedone:
 "The [boyfriend] inhales the first few bites of your breakfast."

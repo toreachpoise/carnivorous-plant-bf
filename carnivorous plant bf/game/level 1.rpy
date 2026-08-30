@@ -19,12 +19,12 @@ if handler.first_try == True:
     show tutorial win
     p "Fully chop all ingredients to make a Tasty sandwich."
     p "If you don't fully chop all ingredients before running out of beats your sandwich will Suck Ass."
-menu:
-    "Do you need to hear about the controls again?"
-    "yes":
-        jump controls_explanation
-    "no":
-        pass
+# menu:
+#     "Do you need to hear about the controls again?"
+#     "yes":
+#         jump controls_explanation
+#     "no":
+#         pass
 p "Let's get cooking!"
 # python:
 #     handler.game_over = False
@@ -33,12 +33,16 @@ $ handler.reset()
 call screen minigame("level 1")
 menu:
     "do you want to try again?"
-    "yep":
+    "yes":
         jump minigame
-    "no thanks, let's skip this level":
-        # $ handler.next_stage()
+    "I need to hear the controls again":
+        jump controls_explanation
+    # "no thanks, let's skip this level":
+    #     # $ handler.next_stage()
         pass
 label leveldone:
 $ handler.stage_complete = False
 if handler.level == "level 2":
-    jump minigame
+    jump chapter3minigamedone
+if handler.level == "level 3":
+    jump chapter5minigamedone

@@ -191,7 +191,7 @@ scene kitchen light
 label chapter3minigame:
 menu:
     "try minigame?":
-        ARE "just kidding it's not ready yet"
+        jump minigame
     "skip":
         pass
 

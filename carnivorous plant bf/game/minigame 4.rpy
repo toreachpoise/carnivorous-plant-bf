@@ -202,6 +202,7 @@ init python:
                 self.miss = False
             else:
                 self.miss = True
+                handler.SetMissed()
 
             return not self.miss
 
@@ -454,21 +455,44 @@ init python:
 
             raise renpy.IgnoreEvent()
 
+        def SetMissed(self):
+            global ch3cut
+            global ch5cut
+
+            if self.level == "level 1":
+                ch3cut = True
+            elif self.level == "level 2":
+                ch5cut = True
+
+            print("ch3cut: " + str(ch3cut))
+            print("ch5cut: " + str(ch5cut))
+
+        def ResetMissed(self):
+            global ch3cut
+            global ch5cut
+
+            ch3cut = False
+            ch5cut = False
+
         def instantiate_level(self,level):
             # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
             # a full bar is ~480 units of time?
 
             # each ingredient gets a custom scaling to handle their sizes not being consistent, the formula for this scaler is (<chicken wing width> * ui_scale) / x = scaler, where x is the length in pixels of the asset to be scaled.
             if level == "level 1":
-                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,110,140,190,220,250])
+                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,40,80,120,140,160,200,240,280,300,320])
             elif level == "level 2":
                 return Level([LevelIngredient("chicken",4,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 1,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,140,190,220,270,300,330,360])
 
         def next_stage(self):
             if self.level == "level 1":
                 self.level = "level 2"
+            elif self.level == "level 2":
+                self.level = "level 3"
 
         def reset(self):
+            if self.game_over == True:
+                self.ResetMissed()
             self.keyboard_held = {"chop": False, "swap": False}
             self.stage_complete = False
             self.game_over = False
@@ -487,7 +511,7 @@ init python:
     # try not to make the gap between times shorter than the reset time for the hit/miss indicator (currently 20)
     # a full bar is ~480 units of time?
     # this is now set in handler.instantiate level, but since the other stuff is globally called here I'm gonna also set it here since deadline is in >7 days
-    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,110,140,190,220,250])
+    cur_level = Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,40,80,120,140,160,200,240,280,300,320])
 
     player = Player(32, 32, 1, 1)
     cutting_board = CuttingBoard()
