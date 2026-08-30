@@ -1,9 +1,18 @@
 label chapter1:
+label dream1:
+$ dreamer.draw(dreamstonight, 1)
+#$ dreamer.dreams.show
+$ this_dream = dreamer.dreams[0].show()
+
+scene black
+"[this_dream]"
+
+label plantstore:
     # Show a background. This uses a placeholder by default, but you can
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
-    scene plant store exterior 2
+    scene plant store exterior 2 with blinds
 
     "The tagline on the sign says 'Grow your wishes!'"
     "The exterior is overgrown with ivy."
@@ -156,6 +165,6 @@ label signcontract:
     w "Thank you for coming to the Magic Plant Shop, please give us a good review on Boogle Maps~!"
     $ chapter = 2
 
-jump start
+jump startmenu
 
 

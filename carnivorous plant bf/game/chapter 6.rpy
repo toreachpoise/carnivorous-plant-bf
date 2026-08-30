@@ -148,4 +148,4 @@ ARE "The concept was created by Aaron El Sabrout and Rhys Maxwell."
 ARE "Rhys wrote the script and created the minigame. Aaron did the art, Ren'Py programming, and some editing/additional writing."
 ARE "We hope you find your greatest desire ... if it's actually good for you!"
 $ chapter = 7
-jump start
+jump startmenu

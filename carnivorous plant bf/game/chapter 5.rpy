@@ -59,6 +59,7 @@ menu:
         "You proffer the impossibly small feeling bag of groceries."
         p "Look, I went to the grocery store to buy you food. I can have it ready in just a minute."
         p "Okay quick breakfast let's do it."
+        $ chapter = 5.5
         jump minigame
     "You can have some of my blood":
         p "Look, if you really can't wait, take me instead. You can have a drink, and this fluffy guy will get to live."
@@ -82,9 +83,21 @@ menu:
         b "THANK YOU, oh my god thank you."
         b "You're still gonna make breakfast though, right?"
         p "Are you fucking kidding me?"
+        $ chapter = 5.5
         jump minigame
 
 label chapter5minigamedone:
+scene kitchen overgrown
+if boyfriend == "flytrap":
+    show flytrap with dissolve
+if boyfriend == "spider":
+    show spider with dissolve
+if boyfriend == "foxglove":
+    show foxglove with dissolve
+if boyfriend == "thistle":
+    show thistle with dissolve
+if boyfriend == "orb":
+    show orb with dissolve
 "The [boyfriend] inhales the first few bites of your breakfast."
 "It's clearly a great act of will when it slows down to properly enjoy the rest of it, to savor your work."
 "As each bite is absorbed to his satisfaction, the vines around the little puppy loosen, and he's left shaking but free."
@@ -164,6 +177,8 @@ menu:
         p "Yeah, it's been a big and uh ... confusing day for sure. I wouldn't mind lying down on the couch near you too."
         "Every fiber of your plant seems to let out a tension it was carrying. The roots settle their wriggling into a gentle breathing pulse around the room."
         "As you drift off together, your fingers and his roots entangle in each other."
+        scene black with fade
+        "..."
     "don't":
         $ optimism -= 5
         $ slept_together = False
@@ -176,7 +191,13 @@ menu:
         "You go to your room, trying not to turn your back on it the whole time."
         p "......"
         p "What have I done?"
-"..."
+        scene black with fade
+        "..."
 $ chapter = 6
-jump start
+
+label dream3:
+$ dreamer.draw(dreamstonight, 3)
+$ this_dream = dreamer.dreams[2].show()
+"[this_dream]"
+jump startmenu
         

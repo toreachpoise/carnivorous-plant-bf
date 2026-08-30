@@ -5,21 +5,21 @@ if handler.first_try == True:
     scene black
 
     show tutorial beats
-    p "This is the cooking screen, in the red bar blue beats will come from right to left."
+    RM "This is the cooking screen, in the red bar blue beats will come from right to left."
     show tutorial chop
-    p "Press A when a beat is in the green section to Chop!"
+    RM "Press A when a beat is in the green section to Chop!"
     show tutorial progress
-    p "When you Chop! at the right time, you will fill up the selected ingredient on the right somewhat. The amount is unique to each ingredient."
+    RM "When you Chop! at the right time, you will fill up the selected ingredient on the right somewhat. The amount is unique to each ingredient."
     show tutorial one_ingredient_done
-    p "Fill up the ingredient all the way to completely chop it."
+    RM "Fill up the ingredient all the way to completely chop it."
     show tutorial swap
-    p "Press D to Swap! your selected ingredient."
+    RM "Press D to Swap! your selected ingredient."
     show tutorial swap_progress
-    p "Now when you Chop! it will fill up that ingredient on the right."
+    RM "Now when you Chop! it will fill up that ingredient on the right."
     show tutorial win
-    p "Fully chop all ingredients to make a Tasty sandwich."
-    p "If you don't fully chop all ingredients before running out of beats your sandwich will Suck Ass."
-    p "Let's get cooking!"
+    RM "Fully chop all ingredients to make a Tasty sandwich."
+    RM "If you don't fully chop all ingredients before running out of beats your sandwich will Suck Ass."
+    RM "Let's get cooking!"
 # menu:
 #     "Do you need to hear about the controls again?"
 #     "yes":
@@ -38,12 +38,14 @@ menu:
         jump minigame
     "I need to hear the controls again":
         jump controls_explanation
-    # "no thanks, let's skip this level":
-    #     # $ handler.next_stage()
-        pass
+    "no thanks, let's skip this level":
+        jump leveldone
+
 label leveldone:
 $ handler.stage_complete = False
-if handler.level == "level 2":
+if chapter == 3.5:
     jump chapter3minigamedone
-if handler.level == "level 3":
+elif chapter == 5.5:
     jump chapter5minigamedone
+else:
+    jump start

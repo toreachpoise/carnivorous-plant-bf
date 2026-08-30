@@ -1,4 +1,4 @@
-label dreamsetup:
+init offset = -2
 
 init python:
     import random

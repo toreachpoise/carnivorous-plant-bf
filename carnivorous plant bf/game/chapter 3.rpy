@@ -189,11 +189,8 @@ scene kitchen light
 "You spot most of a log of salami, and some lettuce that should be used now, if not yesterday."
 
 label chapter3minigame:
-menu:
-    "try minigame?":
-        jump minigame
-    "skip":
-        pass
+$ chapter = 3.5
+jump minigame
 
 label chapter3minigamedone:
 scene kitchen light with dissolve
@@ -345,10 +342,10 @@ menu:
         "With a pang of guilt, you carefully place a chair to bar the door. You hope he doesn't hear you. You're pretty sure he does."
         "Sleep does not come easily, but eventually it takes hold and you drift off."
         $ slept_together = False
-        scene bedroom with fade
+        scene black with fade
         "..."
         $ chapter = 4
-        jump start
+        jump dream2
     "What if it's exactly what I wanted?":
         $ optimism += 2
         p "I'd like that." 
@@ -369,8 +366,17 @@ menu:
         "He shifts toward you as he finds his own comfortable position."
         "Your fingers and his leaves drift together as you both drift off."
         "..."
+        scene black with fade
         $ slept_together = True
         $ chapter = 4
-        jump start
+        jump dream2
 
+label dream2:
+$ dreamstonight.build()
+$ dreamstonight.shuffle()
+$ dreamer.draw(dreamstonight, 1)
+$ this_dream = dreamer.dreams[2].show()
+"[this_dream]"
+
+jump startmenu
 
