@@ -375,7 +375,7 @@ menu:
 label dream2:
 $ dreamstonight.build()
 $ dreamstonight.shuffle()
-$ dreamer.draw(dreamstonight, 1)
+$ dreamer.draw(dreamstonight, 3)
 $ this_dream = dreamer.dreams[2].show()
 "[this_dream]"
 

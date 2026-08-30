@@ -485,9 +485,10 @@ init python:
             #     return Level([LevelIngredient("chicken",4,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 1,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,140,190,220,270,300,330,360])
             
             global chapter
-            if chapter == 5:
+            if chapter < 5:
                 return Level([LevelIngredient("chicken",4,"/images/minigame imgs/Plant-bf-minigame-Chicken-cropped.png", 55, ui_scale),LevelIngredient("tomato", 1,"/images/minigame imgs/Plant-bf-minigame-Tomato-cropped.png", 63, 5.23),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,30,60,90,140,190,220,270,300,330,360])  
-            return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,40,80,120,140,160,200,240,280,300,320])
+            else:
+                return Level([LevelIngredient("borger",3,"/images/minigame imgs/Plant-bf-minigame-Borger-cropped.png", 68,4.85),LevelIngredient("lettuce", 2,"/images/minigame imgs/Plant-bf-minigame-Lettuce-cropped.png", 67, 4.92)], [0,40,80,120,140,160,200,240,280,300,320])
 
         # the level variable is deprecated, we can set the level based on the current chapter instead which is more reliable and compatible with chapter select as a feature
         def next_stage(self):
