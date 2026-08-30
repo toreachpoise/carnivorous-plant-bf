@@ -448,10 +448,10 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
     style_prefix "game_menu"
 
-    if main_menu:
-        add gui.main_menu_background
-    else:
-        add gui.game_menu_background
+    #if main_menu:
+        #add gui.main_menu_background
+    #else:
+    add gui.game_menu_background
     if preferences:
         add "gui/overlay/preferences.png"
 
@@ -589,6 +589,7 @@ screen about():
     use game_menu(_("About"), scroll="viewport"):
 
         style_prefix "about"
+        
         
         vbox:
             ypos 100 xpos 200
@@ -1160,7 +1161,10 @@ style help_button is gui_button
 style help_button_text is gui_button_text
 style help_label is gui_label
 style help_label_text is gui_label_text
-style help_text is gui_text
+
+style help_text:
+    properties gui.button_properties("help_button")
+    color "#f5d6d5"
 
 style help_button:
     properties gui.button_properties("help_button")
@@ -1177,6 +1181,7 @@ style help_label_text:
     size gui.text_size
     xalign 1.0
     textalign 1.0
+    color "#81edd4"
 
 
 
