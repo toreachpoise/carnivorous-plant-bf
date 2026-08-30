@@ -367,29 +367,29 @@ screen main_menu():
     
     #use navigation ## in this case we're getting rid of the navigation formatting
 
-    imagebutton auto "gui/button/main_menu_%s.png" action Start() xpos 440 ypos 410  
-    textbutton _("START") action Start() xpos 620 ypos 425
+    imagebutton auto "gui/button/main menu buttons/start %s.png" action Start() xpos 440 ypos 410  
+    #textbutton _("START") action Start() xpos 620 ypos 425
     
-    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("load") xpos 440 ypos 510  
-    textbutton _("LOAD") action ShowMenu("load") xpos 625 ypos 525
+    imagebutton auto "gui/button/main menu buttons/load %s.png" action ShowMenu("load") xpos 440 ypos 510  
+    #textbutton _("LOAD") action ShowMenu("load") xpos 625 ypos 525
 
-    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("preferences") xpos 1000 ypos 410
-    textbutton _("PREFERENCES") action ShowMenu("preferences") xpos 1120 ypos 425
+    imagebutton auto "gui/button/main menu buttons/preferences %s.png" action ShowMenu("preferences") xpos 1000 ypos 410
+    #textbutton _("PREFERENCES") action ShowMenu("preferences") xpos 1120 ypos 425
 
-    imagebutton auto "gui/button/main_menu_%s.png" action ShowMenu("about") xpos 1000 ypos 510
-    textbutton _("ABOUT") action ShowMenu("about") xpos 1180 ypos 525
+    imagebutton auto "gui/button/main menu buttons/about %s.png" action ShowMenu("about") xpos 1000 ypos 510
+    #textbutton _("ABOUT") action ShowMenu("about") xpos 1180 ypos 525
 
     if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
 
         ## Help isn't necessary or relevant to mobile devices.
-        imagebutton auto "gui/button/main_menu_%s.png" xpos 440 ypos 610 
-        textbutton _("HELP") action ShowMenu("help") xpos 625 ypos 625
+        imagebutton auto "gui/button/main menu buttons/help %s.png" action ShowMenu("help") xpos 440 ypos 610 
+        #textbutton _("HELP") action ShowMenu("help") xpos 625 ypos 625
 
     if renpy.variant("pc"):
 
         ## The quit button is banned on iOS and unnecessary on Android and web.
-        imagebutton auto "gui/button/main_menu_%s.png" xpos 1000 ypos 610         
-        textbutton _("QUIT") action Quit(confirm=not main_menu) xpos 1200 ypos 625
+        imagebutton auto "gui/button/main menu buttons/quit %s.png" action Quit(confirm=not main_menu) xpos 1000 ypos 610         
+        #textbutton _("QUIT") action Quit(confirm=not main_menu) xpos 1200 ypos 625
 
     if gui.show_name:
 

@@ -23,7 +23,7 @@ define gui.show_name = True
 
 ## The version of the game.
 
-define config.version = "8/22 Playtest Version"
+define config.version = "8/30 Pre-Release Version"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
@@ -31,7 +31,7 @@ define config.version = "8/22 Playtest Version"
 
 define gui.about = _p("""
 
-This game was greated by Aaron El Sabrout and Rhys Maxwell for the 2026 Trans Representation Game Jam~!
+Carnivorous Plant Boyfriend is created by Aaron El Sabrout and Rhys Maxwell. It was made with Ren'py for the 2026 Trans Representation Game Jam~!
 
 """)
 
