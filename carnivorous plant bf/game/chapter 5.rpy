@@ -58,7 +58,8 @@ menu:
     "I'll make you something":
         "You proffer the impossibly small feeling bag of groceries."
         p "Look, I went to the grocery store to buy you food. I can have it ready in just a minute."
-        ARE "Here is where it would take you to the minigame but an even harder version."
+        p "Okay quick breakfast let's do it."
+        jump minigame
     "You can have some of my blood":
         p "Look, if you really can't wait, take me instead. You can have a drink, and this fluffy guy will get to live."
         "Roots and vines lift you before you know what's happening and carry you to face your [boyfriend], although it's hard to feel like you're the owner now."
