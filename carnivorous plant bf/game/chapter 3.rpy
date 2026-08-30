@@ -190,6 +190,7 @@ scene kitchen light
 
 label chapter3minigame:
 $ chapter = 3.5
+"Well, lets get cooking."
 jump minigame
 
 label chapter3minigamedone:
