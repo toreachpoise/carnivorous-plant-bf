@@ -19,13 +19,14 @@ if handler.first_try == True:
     show tutorial win
     p "Fully chop all ingredients to make a Tasty sandwich."
     p "If you don't fully chop all ingredients before running out of beats your sandwich will Suck Ass."
+    p "Let's get cooking!"
 # menu:
 #     "Do you need to hear about the controls again?"
 #     "yes":
 #         jump controls_explanation
 #     "no":
 #         pass
-p "Let's get cooking!"
+
 # python:
 #     handler.game_over = False
 $ handler.reset()
