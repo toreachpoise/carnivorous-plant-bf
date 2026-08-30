@@ -136,10 +136,13 @@ menu:
         "It bounces off his cheek, leaving a sweet red stain."
         "He drops the watering can and charges at you, sending the two of you rolling in the grass, smiles unremovable from your faces."
         "This is just like how you met, you think."
-        if (optimism < 5) OR (brains > 3):
+        if (optimism < 5):
+            "Though if you think about it, you can't remember how you met."
+        elif (brains > 3):
             "Though if you think about it, you can't remember how you met."
         "As you spin, the two of you are constant, the center of all that exists."
         "Finally, your greatest desire."
+
 scene aquarium with fade
 "..."
 ARE "Thank you so much for playing the demo version of Carnivorous Plant Boyfriend!"
