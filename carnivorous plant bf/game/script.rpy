@@ -195,8 +195,6 @@ $ dreamstonight.shuffle()
 label startmenu:
     scene plant store exterior 1
     menu:
-        "minigame":
-            jump minigame
         "story":
             if chapter == 1:                
                 jump chapter1
@@ -221,5 +219,7 @@ label startmenu:
                         jump minigame
                     "Quit":
                         pass
+        "minigame":
+            jump minigame
 
     return

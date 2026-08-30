@@ -23,7 +23,7 @@ define gui.show_name = True
 
 ## The version of the game.
 
-define config.version = "8/30 Pre-Release Version"
+define config.version = "8.30 Pre-Release Version"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
